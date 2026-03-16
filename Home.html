@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Leveling Nexus — Home</title>
+
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<script type="module" src="x-main.js"></script>
+<script type="module" src="y-connectionError.js"></script>
+<script type="module" src="y-homeActiveQuest.js"></script>
+<script type="module" src="y-activityLog.js"></script>
+<script type="module" src="y-gameLogic.js"></script>
+
+</head>
+
+<body class="home">
+  <div class="container">
+    <header>
+      <div>
+        <div class="logo">LEVELING NEXUS</div>
+        <div class="subtitle">Gamified habit tracker — complete quests to gain XP & stats</div>
+      </div>
+
+      <div class="nav-buttons">
+        <!-- LIVE CLOCK -->
+      <div class="header-clock">
+        <div class="clock-time" id="clock-time">--<span class="clock-colon">:</span>-- --</div>
+        <div class="clock-date" id="clock-date">--- --, ----</div>
+      </div>
+
+        <div class="all-nav">
+        <button class="nav-btn active">Home</button>
+        <button class="nav-btn" onclick="toQuest()">Quest</button>
+        <button class="nav-btn" onclick="toLeaderboard()">Leaderboard</button>
+        <button class="nav-btn" onclick="toProfile()">Profile</button>
+      </div>
+
+      </div>
+
+    </header>
+
+    <main>
+      <div class="card">
+        <div class="section-title">Your Ascension</div>
+
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="label">Strength</div>
+            <div class="value" id="stat-strength"></div>
+          </div>
+          <div class="stat">
+            <div class="label">Intelligence</div>
+            <div class="value" id="stat-intel"></div>
+          </div>
+          <div class="stat">
+            <div class="label">Stamina</div>
+            <div class="value" id="stat-stam"></div>
+          </div>
+          <div class="stat">
+            <div class="label">Health</div>
+            <div class="value" id="stat-health"></div>
+          </div>
+        </div>
+
+        <div class="xp-block">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="small">XP Progress</div>
+            <div class="class-pill" id="class-pill">CLASS: </div>
+          </div>
+
+          <div class="xp-line" style="margin-top:10px">
+            <div class="xp-fill" id="xp-fill"></div>
+          </div>
+
+          <div class="level-row">
+            <div class="level">Level <span id="level-num"></span></div>
+            <div class="small" id="xp-text"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="section-title">Active Quest</div>
+          </div>
+
+          <div class="quest-list" id="quest-list">
+            <!-- quests are now hidden -->
+          </div>
+
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="section-title">Activity Log</div>
+          <div id="log" style="font-size:13px;color:var(--muted);max-height:200px;overflow:auto;padding-right:8px"></div>
+        </div>
+      </div>
+
+    </main>
+
+    <footer></footer>
+
+  </div>
+
+  <script src="script.js"></script>
+  
+</body>
+</html>

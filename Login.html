@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leveling Nexus — Login</title>
+
+<link rel="stylesheet" href="style.css">
+<script type="module" src="z-loginFirebase.js"></script>
+<script type="module" src="y-connectionError.js"></script>
+
+</head>
+
+<body class="login">
+
+<div class="login-container">
+    <!-- LIVE CLOCK -->
+    <div class="header-clock">
+      <div class="clock-time" id="clock-time">--<span class="clock-colon">:</span>-- --</div>
+      <div class="clock-date" id="clock-date">--- --, ----</div>
+    </div>
+
+    <!-- Glow Icon -->
+    <div class="icon-circle">
+        <span>!</span>
+    </div>
+
+    <h2>GATEWAY ACCESS</h2>
+
+    <!-- Registration success hint -->
+    <div id="reg-hint" style="display:none;
+         margin-bottom:12px;
+         padding:8px 14px;
+         border-radius:8px;
+         font-family:'Orbitron',system-ui;
+         font-size:9px; letter-spacing:0.5px;
+         text-align:center; line-height:1.6;
+         background:rgba(65,182,255,0.06);
+         border:1px solid rgba(65,182,255,0.2);
+         color:rgba(65,182,255,0.65);">
+      Please log in to continue your journey.
+    </div>
+
+    <div class="input-field">
+        <input id="email" type="text" placeholder="Email">
+    </div>
+
+    <div class="input-field">
+        <input id="password" type="password" placeholder="Password">
+    </div>
+
+    <!-- Forgot Password -->
+    <div style="text-align:right; margin-top:8px;">
+      <a href="ForgotPassword.html"
+         style="font-family:'Orbitron',system-ui; font-size:10px;
+                color:rgba(65,182,255,0.5); letter-spacing:0.5px;
+                text-decoration:none; transition:color 0.2s;"
+         onmouseover="this.style.color='rgba(65,182,255,0.9)'"
+         onmouseout="this.style.color='rgba(65,182,255,0.5)'">
+        Forgot Password?
+      </a>
+    </div>
+
+    <div class="button-row">
+        <button class="btn" id="submit" type="submit">Login</button>
+
+        <div class="or-divider">OR</div>
+
+        <button class="btn" onclick="signup()">Sign Up</button>
+    </div>
+
+    <!-- Back to index -->
+    <div style="margin-top:20px; text-align:center;">
+      <a href="index.html"
+         style="font-family:'Orbitron',system-ui; font-size:9px;
+                color:rgba(65,182,255,0.3); letter-spacing:0.5px;
+                text-decoration:none; transition:color 0.2s;"
+         onmouseover="this.style.color='rgba(65,182,255,0.7)'"
+         onmouseout="this.style.color='rgba(65,182,255,0.3)'">
+        ◀ Back to Website Preview
+      </a>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+<!-- Show registration hint if redirected from registration -->
+<script>
+  if (document.referrer.includes("NewAccount") ||
+      new URLSearchParams(window.location.search).get("registered") === "true") {
+    document.getElementById("reg-hint").style.display = "block";
+  }
+</script>
+
+</body>
+</html>

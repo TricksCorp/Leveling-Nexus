@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Leveling Nexus — Profile</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+  <script type="module" src="x-main.js"></script>
+  <script type="module" src="y-connectionError.js"></script>
+  <script type="module" src="y-activityLog.js"></script>
+  <script type="module" src="y-gameLogic.js"></script>
+  <script type="module" src="y-profilepic.js"></script>
+
+</head>
+
+<body class="profile">
+  <div class="container">
+    <header>
+      <div>
+        <div class="logo">LEVELING NEXUS</div>
+        <div class="subtitle">Gamified habit tracker — complete quests to gain XP & stats</div>
+      </div>
+
+      <div class="nav-buttons">
+        <!-- LIVE CLOCK -->
+      <div class="header-clock">
+        <div class="clock-time" id="clock-time">--<span class="clock-colon">:</span>-- --</div>
+        <div class="clock-date" id="clock-date">--- --, ----</div>
+      </div>
+
+        <div class="all-nav">
+        <button class="nav-btn" onclick="toHome()">Home</button>
+        <button class="nav-btn" onclick="toQuest()">Quest</button>
+        <button class="nav-btn" onclick="toLeaderboard()">Leaderboard</button>
+        <button class="nav-btn active">Profile</button>
+      </div>
+
+      </div>
+    </header>
+
+    <main>
+      <div class="profile-content">
+        <!-- Profile Information Section -->
+        <div class="profile-card">
+          <div class="section-title">Profile</div>
+          <div class="profile-info">
+            <div class="profile-pic">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+     alt="Profile logo" width="150">
+
+            </div>
+
+            <!-- Profile Details Container -->
+            <div class="profile-details-container">
+              <div class="profile-detail">
+                <div class="label">Name:</div>
+                <div class="value" id="user-name"></div>
+              </div>
+              <div class="profile-detail">
+                <div class="label">Level:</div>
+                <div class="value" id="user-level"></div>
+              </div>
+              <div class="profile-detail">
+                <div class="label">Class:</div>
+                <div class="value" id="user-class"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-card">
+          <div class="section-title">Your Ascension</div>
+          <div class="stats-grid">
+            <div class="stat">
+              <div class="label">Strength</div>
+              <div class="value" id="stat-strength"></div>
+            </div>
+            <div class="stat">
+              <div class="label">Intelligence</div>
+              <div class="value" id="stat-intel"></div>
+            </div>
+            <div class="stat">
+              <div class="label">Stamina</div>
+              <div class="value" id="stat-stam"></div>
+            </div>
+            <div class="stat">
+              <div class="label">Health</div>
+              <div class="value" id="stat-health"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity Log Section -->
+        <div class="log-card">
+          <div class="section-title">Activity Log</div>
+          <div id="log" style="font-size:13px;color:var(--muted);max-height:200px;overflow:auto;padding-right:8px"></div>
+        </div>
+
+        <!-- Log Out Button -->
+        <div class="logout-btn-container">
+          <button class="logout-btn" id="logout">Log Out</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

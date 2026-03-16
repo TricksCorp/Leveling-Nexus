@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leveling Nexus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:     #061018;
+      --neon:   #41b6ff;
+      --neon-2: #00e0ff;
+      --muted:  #9fb6d1;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: "Orbitron", system-ui;
+      color: #d9eefc;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* ── Background image — Sung Jinwoo blurred ── */
+    .bg-image {
+      position: fixed;
+      inset: 0;
+      background: url('./avatars/Sung Jinwoo.jpg') center center / cover no-repeat;
+      filter: blur(6px) brightness(0.45) saturate(0.8);
+      transform: scale(1.08); /* prevent blur edge bleed */
+      z-index: 0;
+    }
+
+    /* ── Gradient overlay on top of blurred bg ── */
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(65,182,255,0.06), transparent),
+        radial-gradient(ellipse 60% 40% at 50% 0%,   rgba(0,0,0,0.3), transparent),
+        linear-gradient(180deg, rgba(6,16,24,0.3) 0%, rgba(6,16,24,0.65) 100%);
+      z-index: 1;
+    }
+
+    /* ── Scanline texture ── */
+    .bg-scanlines {
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ── Main content ── */
+    .content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: clamp(20px, 4vw, 40px) clamp(16px, 4vw, 24px);
+      max-width: 700px;
+      width: 100%;
+    }
+
+    /* ── Logo mark ── */
+    .logo-mark {
+      width: clamp(60px, 12vw, 90px);
+      height: clamp(60px, 12vw, 90px);
+      border-radius: 18px;
+      border: 2px solid rgba(65,182,255,0.5);
+      background: rgba(65,182,255,0.06);
+      box-shadow:
+        0 0 24px rgba(65,182,255,0.3),
+        inset 0 0 20px rgba(65,182,255,0.05);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      margin-bottom: clamp(16px, 3vw, 28px);
+      flex-shrink: 0;
+      animation: logoFloat 3s ease-in-out infinite, logoPulse 3s ease-in-out infinite;
+    }
+    .logo-mark img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
+    }
+    @keyframes logoPulse {
+      0%, 100% { box-shadow: 0 0 24px rgba(65,182,255,0.3), inset 0 0 20px rgba(65,182,255,0.05); }
+      50%       { box-shadow: 0 0 40px rgba(65,182,255,0.5), inset 0 0 30px rgba(65,182,255,0.1); }
+    }
+
+    /* ── Site name ── */
+    .site-name {
+      font-size: clamp(28px, 6vw, 48px);
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: var(--neon);
+      text-shadow:
+        0 0 20px rgba(65,182,255,0.6),
+        0 0 60px rgba(65,182,255,0.2);
+      margin-bottom: 10px;
+      animation: fadeSlideDown 0.8s ease forwards;
+      opacity: 0;
+      animation-delay: 0.1s;
+    }
+
+    /* ── Tagline ── */
+    .tagline {
+      font-size: clamp(11px, 2vw, 14px);
+      font-weight: 400;
+      letter-spacing: 3px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      animation: fadeSlideDown 0.8s ease forwards;
+      opacity: 0;
+      animation-delay: 0.3s;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 180px; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(65,182,255,0.4), transparent);
+      margin-bottom: 40px;
+      animation: fadeIn 1s ease forwards;
+      opacity: 0;
+      animation-delay: 0.5s;
+    }
+
+    /* ── Awakening text ── */
+    .awakening {
+      font-size: clamp(22px, 5vw, 38px);
+      font-weight: 700;
+      letter-spacing: 2px;
+      line-height: 1.3;
+      margin-bottom: 12px;
+      animation: fadeSlideUp 0.8s ease forwards;
+      opacity: 0;
+      animation-delay: 0.6s;
+    }
+    .awakening .highlight {
+      color: var(--neon);
+      text-shadow: 0 0 20px rgba(65,182,255,0.6);
+      display: inline-block;
+      position: relative;
+    }
+    .awakening .highlight::after {
+      content: "";
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--neon), var(--neon-2));
+      box-shadow: 0 0 8px rgba(65,182,255,0.6);
+      animation: lineGrow 0.6s ease forwards;
+      transform-origin: left;
+      animation-delay: 1.2s;
+      transform: scaleX(0);
+    }
+    @keyframes lineGrow {
+      to { transform: scaleX(1); }
+    }
+
+    /* ── Subtitle ── */
+    .subtitle {
+      font-size: clamp(10px, 1.8vw, 13px);
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      color: rgba(159,182,209,0.65);
+      margin-bottom: clamp(28px, 5vw, 52px);
+      line-height: 1.7;
+      animation: fadeSlideUp 0.8s ease forwards;
+      opacity: 0;
+      animation-delay: 0.8s;
+    }
+
+    /* ── Buttons ── */
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeSlideUp 0.8s ease forwards;
+      opacity: 0;
+      animation-delay: 1s;
+    }
+
+    .btn {
+      padding: clamp(10px, 2vw, 14px) clamp(20px, 4vw, 36px);
+      font-family: "Orbitron", system-ui;
+      font-size: clamp(10px, 1.8vw, 12px);
+      font-weight: 700; letter-spacing: 2px;
+      border-radius: 10px; cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    /* Primary — Login */
+    .btn-primary {
+      color: #021726;
+      background: linear-gradient(180deg, var(--neon), var(--neon-2));
+      border: none;
+      box-shadow: 0 0 20px rgba(65,182,255,0.45), 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 32px rgba(65,182,255,0.7), 0 12px 28px rgba(0,0,0,0.6);
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    /* Secondary — View Website */
+    .btn-secondary {
+      color: var(--neon);
+      background: transparent;
+      border: 1px solid rgba(65,182,255,0.4);
+      box-shadow: 0 0 12px rgba(65,182,255,0.1);
+    }
+    .btn-secondary:hover {
+      background: rgba(65,182,255,0.08);
+      border-color: rgba(65,182,255,0.7);
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(65,182,255,0.2);
+    }
+    .btn-secondary:active { transform: translateY(0); }
+
+    /* ── Bottom caption ── */
+    .caption {
+      position: fixed;
+      bottom: 16px;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: clamp(7px, 1.5vw, 9px);
+      letter-spacing: 2px;
+      color: rgba(65,182,255,0.2);
+      text-transform: uppercase;
+      z-index: 10;
+      animation: fadeIn 1.5s ease forwards;
+      opacity: 0;
+      animation-delay: 1.4s;
+      padding: 0 16px;
+    }
+
+    /* ── Neon corner accents ── */
+    .corner {
+      position: fixed;
+      width: 40px; height: 40px;
+      z-index: 10;
+      opacity: 0.4;
+    }
+    .corner-tl { top: 20px; left: 20px; border-top: 2px solid var(--neon); border-left: 2px solid var(--neon); }
+    .corner-tr { top: 20px; right: 20px; border-top: 2px solid var(--neon); border-right: 2px solid var(--neon); }
+    .corner-bl { bottom: 20px; left: 20px; border-bottom: 2px solid var(--neon); border-left: 2px solid var(--neon); }
+    .corner-br { bottom: 20px; right: 20px; border-bottom: 2px solid var(--neon); border-right: 2px solid var(--neon); }
+
+    /* ── Animations ── */
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── Tablet ── */
+    @media (max-width: 768px) {
+      .corner { width: 28px; height: 28px; }
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      .btn-group { flex-direction: column; align-items: center; width: 100%; }
+      .btn { width: 100%; max-width: 280px; text-align: center; }
+      .corner { width: 20px; height: 20px; }
+      .awakening { letter-spacing: 1px; }
+    }
+
+    /* ── Very small (< 380px) ── */
+    @media (max-width: 380px) {
+      .divider { display: none; }
+      .corner  { display: none; }
+      .caption { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Background -->
+  <div class="bg-image"></div>
+  <div class="bg-overlay"></div>
+  <div class="bg-scanlines"></div>
+
+  <!-- Corner accents -->
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- Main content -->
+  <div class="content">
+
+    <div class="logo-mark">
+      <img src="./Logo.png" alt="Leveling Nexus Logo"
+           onerror="this.style.display='none'; this.parentElement.innerHTML='LN'; this.parentElement.style.fontSize='30px'; this.parentElement.style.fontWeight='900'; this.parentElement.style.color='var(--neon)';" />
+    </div>
+
+    <div class="site-name">LEVELING NEXUS</div>
+    <div class="tagline"></div>
+
+    <div class="divider"></div>
+
+    <div class="awakening">
+      <span class="highlight">Begin Your Awakening!</span>
+    </div>
+
+    <div class="subtitle">
+      Transform your daily habits into epic quests.<br>
+      Gain XP, level up, and rise through the ranks.
+    </div>
+
+    <div class="btn-group">
+      <a href="Login.html" class="btn btn-primary">ENTER GATEWAY</a>
+      <a href="PageWebsite.html" class="btn btn-secondary">VIEW WEBSITE</a>
+    </div>
+
+  </div>
+
+  <div class="caption">Leveling Nexus &nbsp;·&nbsp; Your journey begins here</div>
+
+</body>
+</html>

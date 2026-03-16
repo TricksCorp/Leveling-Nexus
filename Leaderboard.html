@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Leveling Nexus — Leaderboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+  <script type="module" src="x-main.js"></script>
+  <script type="module" src="y-connectionError.js"></script>
+  <script type="module" src="y-leaderboard.js"></script>
+
+
+</head>
+
+<body class="leaderboard">
+  <div class="container">
+    <header>
+      <div>
+        <div class="logo">LEVELING NEXUS</div>
+        <div class="subtitle">Gamified habit tracker — complete quests to gain XP & stats</div>
+      </div>
+
+      <div class="nav-buttons">
+        <!-- LIVE CLOCK -->
+      <div class="header-clock">
+        <div class="clock-time" id="clock-time">--<span class="clock-colon">:</span>-- --</div>
+        <div class="clock-date" id="clock-date">--- --, ----</div>
+      </div>
+
+        <div class="all-nav">
+        <button class="nav-btn" onclick="toHome()">Home</button>
+        <button class="nav-btn" onclick="toQuest()">Quest</button>
+        <button class="nav-btn active">Leaderboard</button>
+        <button class="nav-btn" onclick="toProfile()">Profile</button>
+      </div>
+
+      </div>
+    </header>
+
+    <main>
+      <div class="card">
+        <div class="section-title">Leaderboard</div>
+
+        <div class="leaderboard-list" id="leaderboard-list">
+          
+          </div>
+          <div class="leaderboard-placeholder" id="leaderboard-placeholder"></div>
+      </div> 
+          <!-- Your Current Rank Section -->
+<div class="your-current-rank">
+  <div class="section-title">Your Current Rank</div>
+  <div class="current-rank-info">
+    <div class="rank">#NULL</div> <!-- Placeholder for current rank -->
+    <div class="name">Player Name</div> <!-- Placeholder for player name -->
+    <div class="class">Class: NULL, Level: NULL</div> <!-- Placeholder for XP -->
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer></footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

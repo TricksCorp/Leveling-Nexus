@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Leveling Nexus — Quests</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+  <script type="module" src="x-main.js"></script>
+  <script type="module" src="y-questSystem.js"></script>
+  <script type="module" src="y-createQuest.js"></script>
+  <script type="module" src="y-gameLogic.js"></script>
+  <script type="module" src="y-connectionError.js"></script>
+  <script type="module" src="y-activityLog.js"></script>
+
+</head>
+
+<body class="quest">
+  <div class="container">
+
+    <!-- HEADER -->
+    <header>
+      <div>
+        <div class="logo">LEVELING NEXUS</div>
+        <div class="subtitle">Gamified habit tracker — complete quests to gain XP & stats</div>
+      </div>
+
+      <div class="nav-buttons">
+
+        <!-- LIVE CLOCK -->
+      <div class="header-clock">
+        <div class="clock-time" id="clock-time">--<span class="clock-colon">:</span>-- --</div>
+        <div class="clock-date" id="clock-date">--- --, ----</div>
+      </div>
+
+      <div class="all-nav">
+        <button class="nav-btn" onclick="toHome()">Home</button>
+        <button class="nav-btn active">Quest</button>
+        <button class="nav-btn" onclick="toLeaderboard()">Leaderboard</button>
+        <button class="nav-btn" onclick="toProfile()">Profile</button>
+      </div>
+
+      </div>
+
+    </header>
+
+    <!-- QUEST GRID -->
+    <main class="quest-grid">
+
+      <div class="card">
+        <div class="section-title">Active Quest</div>
+        <div class="quest-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Daily Quest</div>
+        <div class="quest-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Urgent Quest</div>
+        <div class="quest-list"></div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="right-column">
+        <div class="card add-quest">
+          <div class="section-title">Add Quest</div>
+          <button class="quest-btn">+ Create New Quest</button>
+        </div>
+
+        <div class="card in-progress">
+          <div class="section-title">In Progress</div>
+          <div class="quest-list"></div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ACTIVITY LOG -->
+    <div class="card activity-log">
+      <div class="section-title">Activity Log</div>
+      <div class="log-content"></div>
+    </div>
+
+    <script src="script.js"></script>
+
+  </div>
+</body>
+</html>
