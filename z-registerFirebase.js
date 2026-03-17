@@ -28,6 +28,17 @@ const db        = getDatabase(app);
 const firestore = getFirestore(app);
 
 // ===============================
+// USERNAME LIMIT
+// Hard-cap the input field to 13 chars
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+  const usernameInput = document.getElementById("username");
+  if (usernameInput) {
+    usernameInput.maxLength = 13;
+  }
+});
+
+// ===============================
 // DEFAULT GAME DATA
 // ===============================
 function buildDefaultGameData() {
@@ -99,7 +110,6 @@ function clearStatus() { document.getElementById("register-status")?.remove(); }
 // verification in the background.
 // ===============================
 function showVerifyModal(email, onVerified, onCancel) {
-  // Inject styles once
   if (!document.getElementById("vm-style")) {
     const s = document.createElement("style");
     s.id = "vm-style";
@@ -197,7 +207,7 @@ function showVerifyModal(email, onVerified, onCancel) {
   // ── Poll every 3 seconds for emailVerified ──
   let pollHandle = setInterval(async () => {
     try {
-      await reload(auth.currentUser);       // force refresh token
+      await reload(auth.currentUser);
       if (auth.currentUser?.emailVerified) {
         clearInterval(pollHandle);
         statusEl.textContent      = "✓ Email verified!";
@@ -221,12 +231,11 @@ function showVerifyModal(email, onVerified, onCancel) {
     resendBtn.disabled = true;
     try {
       await sendEmailVerification(auth.currentUser, {
-        url: window.location.origin + "/Login.html"
+        url: window.location.origin + "/LEVELING-NEXUS/Login.html"
       });
       statusEl.textContent = "Email resent!";
       statusEl.style.color = "rgba(65,182,255,0.7)";
     } catch { statusEl.textContent = "Resend failed. Try again."; }
-    // Re-enable after 30 seconds
     setTimeout(() => {
       resendCooldown = false;
       resendBtn.disabled = false;
@@ -258,7 +267,13 @@ document.getElementById("submit").addEventListener("click", async (event) => {
     return;
   }
 
-  // Password policy validation — minimum 8 chars, lowercase + numeric
+  // ✅ Username length validation (backup for non-HTML enforcement)
+  if (username.length > 13) {
+    setStatus("Username must be 13 characters or fewer.", true);
+    return;
+  }
+
+  // Password policy validation
   if (password.length < 8) {
     setStatus("Password must be at least 8 characters.", true);
     return;
@@ -287,11 +302,10 @@ document.getElementById("submit").addEventListener("click", async (event) => {
     // ── Step 2: Send verification email ──
     setStatus("Sending verification email...");
     await sendEmailVerification(user, {
-      url: window.location.origin + "/Login.html"
+      url: window.location.origin + "/LEVELING-NEXUS/Login.html"
     });
 
     // ── Step 3: Show modal and wait for verification ──
-    // Only save data AFTER email is verified.
     setStatus("Check your email to verify your account.");
 
     showVerifyModal(email,
@@ -309,10 +323,11 @@ document.getElementById("submit").addEventListener("click", async (event) => {
             setDoc(doc(firestore, "gameData", user.uid), buildDefaultGameData())
           );
           setStatus("✓ Account ready! Redirecting...");
-          setTimeout(() => { window.location.href = "Login.html"; }, 1200);
+          setTimeout(() => {
+            window.location.href = "/LEVELING-NEXUS/Login.html"; // ✅ Fixed: absolute path
+          }, 1200);
         } catch (saveErr) {
           console.error("[register] Save failed after verify:", saveErr);
-          // Delete auth account since saves failed
           try { await deleteUser(user); } catch {}
           setStatus("Failed to save account data. Please register again.", true);
           submitBtn.disabled = false;
