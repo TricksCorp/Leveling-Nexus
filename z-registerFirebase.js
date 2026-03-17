@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleBtn.addEventListener("click", () => {
       const isHidden = passwordInput.type === "password";
       passwordInput.type      = isHidden ? "text"     : "password";
-      toggleBtn.innerHTML     = isHidden ? "🙈"       : "👁";
+      toggleBtn.innerHTML     = isHidden ? "👁"       : "👁";
       toggleBtn.style.color   = isHidden
         ? "rgba(65,182,255,0.9)"   // visible  → bright
         : "rgba(65,182,255,0.5)";  // hidden   → dim
