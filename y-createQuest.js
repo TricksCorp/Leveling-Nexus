@@ -156,11 +156,12 @@ modalStyle.textContent = `
   font-family: "Orbitron", system-ui; font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
   padding: 3px 7px; border-radius: 6px; white-space: nowrap; flex-shrink: 0;
 }
-.saved-quest-badge.strength    { background: rgba(255,80,80,0.15); border: 1px solid rgba(255,80,80,0.4); color: #ff8080; }
-.saved-quest-badge.intelligence { background: rgba(65,182,255,0.15); border: 1px solid rgba(65,182,255,0.4); color: #41b6ff; }
-.saved-quest-badge.urgent      { background: rgba(255,180,0,0.15); border: 1px solid rgba(255,180,0,0.4); color: #ffb800; }
-.saved-quests-empty  { font-family: "Orbitron", system-ui; font-size: 11px; color: rgba(217,238,252,0.3); text-align: center; padding: 10px 0; letter-spacing: 0.5px; }
-.saved-quests-loading { font-family: "Orbitron", system-ui; font-size: 11px; color: rgba(65,182,255,0.5); text-align: center; padding: 10px 0; letter-spacing: 0.5px; }
+.saved-quest-badge.strength     { background: rgba(255,80,80,0.15);   border: 1px solid rgba(255,80,80,0.4);   color: #ff8080; }
+.saved-quest-badge.intelligence { background: rgba(65,182,255,0.15);  border: 1px solid rgba(65,182,255,0.4);  color: #41b6ff; }
+.saved-quest-badge.urgent       { background: rgba(255,180,0,0.15);   border: 1px solid rgba(255,180,0,0.4);   color: #ffb800; }
+.saved-quest-badge.multi        { background: rgba(65,255,130,0.12);  border: 1px solid rgba(65,255,130,0.35); color: #41ff88; }
+.saved-quests-empty   { font-family: "Orbitron", system-ui; font-size: 11px; color: rgba(217,238,252,0.3); text-align: center; padding: 10px 0; letter-spacing: 0.5px; }
+.saved-quests-loading { font-family: "Orbitron", system-ui; font-size: 11px; color: rgba(65,182,255,0.5);  text-align: center; padding: 10px 0; letter-spacing: 0.5px; }
 .saved-quest-divider { border: none; border-top: 1px solid rgba(65,182,255,0.1); margin: 18px 0 0; }
 .quest-count-badge {
   font-family: "Orbitron", system-ui; font-size: 9px; font-weight: 700;
@@ -177,7 +178,7 @@ modalStyle.textContent = `
 .quest-delete-btn:hover { background: rgba(255,80,80,0.25); border-color: rgba(255,80,80,0.6); color: #ff4040; transform: translateY(-1px); box-shadow: 0 0 8px rgba(255,80,80,0.4); }
 .quest-delete-btn:active { transform: translateY(0); }
 .quest-delete-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
-/* Permanent lock icon — replaces delete button for undeletable quests */
+/* Permanent lock icon */
 .quest-lock-icon {
   width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   font-size: 11px; border-radius: 6px;
@@ -212,24 +213,82 @@ document.head.appendChild(modalStyle);
 // ===============================
 // HELPERS
 // ===============================
-function timeToMinutes(t) { const [h,m] = t.split(":").map(Number); return h*60+m; }
-function snapTo30(mins)   { return Math.floor(mins/30)*30; }
-function rangesOverlap(s1,e1,s2,e2) { return s1 < e2 && s2 < e1; }
+
+// Day number (0=Sun … 6=Sat) → abbreviation used by the quest system
+const DAY_NUM_TO_ABBR = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+/**
+ * Normalise a quest's days array to always return abbreviation strings.
+ * Handles both the old number format [0,1,2,...] (Sleep quest from evaluation)
+ * and the string format ["Mon","Tue",...] (player-created quests).
+ */
+function normaliseDays(days) {
+  if (!Array.isArray(days)) return [];
+  return days.map(d => typeof d === "number" ? (DAY_NUM_TO_ABBR[d] || String(d)) : d);
+}
+
 function minsToTime(tot) {
   const h=Math.floor(tot/60), m=tot%60, ap=h>=12?"PM":"AM", h12=h%12||12;
   return `${h12}:${String(m).padStart(2,"0")} ${ap}`;
 }
+
 function getISOWeek(date) {
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
   const day = d.getUTCDay()||7; d.setUTCDate(d.getUTCDate()+4-day);
   const y0 = new Date(Date.UTC(d.getUTCFullYear(),0,1));
   return `${d.getUTCFullYear()}-W${String(Math.ceil(((d-y0)/86400000+1)/7)).padStart(2,"0")}`;
 }
+
 function daysUntil(ts) { return Math.max(0, Math.ceil((ts-Date.now())/86400000)); }
+
 function escapeHtml(s) {
   return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
+
 function showError(el, msg) { el.textContent=msg; el.style.display="block"; }
+
+/**
+ * Check whether two time ranges overlap, correctly handling quests that
+ * cross midnight (endMin < startMin, e.g. Sleep: start=1320, end=360).
+ *
+ * A range that crosses midnight is split into two same-day segments:
+ *   [startMin, 1440)  and  [0, endMin)
+ * then checked against the other range (also split if necessary).
+ */
+function rangesOverlap(s1, e1, s2, e2) {
+  // Expand a potentially midnight-crossing range into 1 or 2 segments
+  function toSegments(s, e) {
+    if (e > s) return [[s, e]];                    // normal same-day range
+    return [[s, 1440], [0, e]];                    // crosses midnight
+  }
+  const segs1 = toSegments(s1, e1);
+  const segs2 = toSegments(s2, e2);
+  // Two segments overlap when one starts before the other ends
+  for (const [a1, b1] of segs1) {
+    for (const [a2, b2] of segs2) {
+      if (a1 < b2 && a2 < b1) return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Returns the display label for a category value.
+ * Handles both string and array (e.g. ["Stamina","Health"]).
+ */
+function getCatDisplay(category) {
+  if (Array.isArray(category)) return category.join(" + ");
+  return category || "—";
+}
+
+/**
+ * Returns the CSS badge class for a category value.
+ * Arrays with multiple entries → "multi" (green).
+ */
+function getCatBadgeClass(category) {
+  if (Array.isArray(category)) return category.length > 1 ? "multi" : (category[0] || "").toLowerCase();
+  return (category || "").toLowerCase();
+}
 
 // ===============================
 // MODAL TYPE LIST
@@ -280,7 +339,7 @@ async function showDailyQuestForm(modal) {
     const v = input.value.trim(); if (!v) return;
     btn.disabled = true;
     if (await addDailyQuestToFirestore(v, cat.value)) {
-      input.value="";
+      input.value = "";
       await renderSavedDailyQuests(list, badge);
       await refreshQuestCards();
     }
@@ -292,7 +351,6 @@ async function showDailyQuestForm(modal) {
 // ACTIVE QUEST FORM
 // ───────────────────────────────
 
-/** Build the hour options (12 AM … 11 PM) for a <select> */
 function buildHourOptions() {
   let html = `<option value="" disabled selected>HH</option>`;
   for (let h = 0; h < 24; h++) {
@@ -303,7 +361,6 @@ function buildHourOptions() {
   return html;
 }
 
-/** Build the minute options — strictly 00 and 30 */
 function buildMinuteOptions() {
   return `
     <option value="" disabled selected>MM</option>
@@ -312,7 +369,6 @@ function buildMinuteOptions() {
   `;
 }
 
-/** Read selected total minutes from a pair of selects, or null if incomplete */
 function readTimePair(hourSel, minSel) {
   const h = hourSel.value;
   const m = minSel.value;
@@ -380,16 +436,16 @@ async function showActiveQuestForm(modal) {
     });
   });
 
-  const titleEl    = modal.querySelector("#aq-title");
-  const catEl      = modal.querySelector("#aq-cat");
-  const startHEl   = modal.querySelector("#aq-start-h");
-  const startMEl   = modal.querySelector("#aq-start-m");
-  const endHEl     = modal.querySelector("#aq-end-h");
-  const endMEl     = modal.querySelector("#aq-end-m");
-  const previewEl  = modal.querySelector("#aq-preview");
-  const errorEl    = modal.querySelector("#aq-error");
-  const addBtn     = modal.querySelector("#aq-add");
-  const listEl     = modal.querySelector("#aq-list");
+  const titleEl   = modal.querySelector("#aq-title");
+  const catEl     = modal.querySelector("#aq-cat");
+  const startHEl  = modal.querySelector("#aq-start-h");
+  const startMEl  = modal.querySelector("#aq-start-m");
+  const endHEl    = modal.querySelector("#aq-end-h");
+  const endMEl    = modal.querySelector("#aq-end-m");
+  const previewEl = modal.querySelector("#aq-preview");
+  const errorEl   = modal.querySelector("#aq-error");
+  const addBtn    = modal.querySelector("#aq-add");
+  const listEl    = modal.querySelector("#aq-list");
 
   function updatePreview() {
     const s = readTimePair(startHEl, startMEl);
@@ -422,30 +478,39 @@ async function showActiveQuestForm(modal) {
     const startMin = readTimePair(startHEl, startMEl);
     const endMin   = readTimePair(endHEl,   endMEl);
 
-    if (!title)              return showError(errorEl, "Quest title is required.");
-    if (startMin === null)   return showError(errorEl, "Select a start time.");
-    if (endMin   === null)   return showError(errorEl, "Select an end time.");
-    if (days.length === 0)   return showError(errorEl, "Select at least one day.");
-    if (endMin <= startMin)  return showError(errorEl, "End time must be after start time.");
-    if ((endMin-startMin) < 30) return showError(errorEl, "Quest must be at least 30 minutes.");
+    if (!title)                     return showError(errorEl, "Quest title is required.");
+    if (startMin === null)          return showError(errorEl, "Select a start time.");
+    if (endMin   === null)          return showError(errorEl, "Select an end time.");
+    if (days.length === 0)          return showError(errorEl, "Select at least one day.");
+    if (endMin <= startMin)         return showError(errorEl, "End time must be after start time.");
+    if ((endMin - startMin) < 30)   return showError(errorEl, "Quest must be at least 30 minutes.");
 
     const user = auth.currentUser;
     if (!user) return showError(errorEl, "Not logged in.");
     addBtn.disabled = true;
 
     try {
-      const gameRef  = doc(firestore,"gameData",user.uid);
+      const gameRef  = doc(firestore, "gameData", user.uid);
       const snap     = await getDoc(gameRef);
-      if (!snap.exists()) { showError(errorEl,"Player data not found."); addBtn.disabled=false; return; }
+      if (!snap.exists()) {
+        showError(errorEl, "Player data not found.");
+        addBtn.disabled = false;
+        return;
+      }
 
       const existing = snap.data().quests?.active || [];
 
-      // Overlap check — same day AND overlapping time window
+      // ── Overlap check ──
+      // Uses rangesOverlap() which correctly handles midnight-crossing quests
+      // (e.g. Sleep: startMin=1320, endMin=360).
+      // Days are normalised from either number or string format before comparing.
       for (const q of existing) {
-        const shared = (q.days||[]).filter(d => days.includes(d));
+        const qDays  = normaliseDays(q.days);
+        const shared = qDays.filter(d => days.includes(d));
         if (shared.length > 0 && rangesOverlap(startMin, endMin, q.startMin, q.endMin)) {
           showError(errorEl, `Conflicts with "${q.title}" on ${shared.join(", ")}.`);
-          addBtn.disabled=false; return;
+          addBtn.disabled = false;
+          return;
         }
       }
 
@@ -456,7 +521,7 @@ async function showActiveQuestForm(modal) {
         days,
         startMin,
         endMin,
-        slots:     (endMin-startMin)/30,
+        slots:     (endMin - startMin) / 30,
         status:    "pending",
         createdAt: Date.now()
       });
@@ -464,7 +529,7 @@ async function showActiveQuestForm(modal) {
       await updateDoc(gameRef, { "quests.active": existing, updatedAt: Date.now() });
 
       // Reset form
-      titleEl.value = "";
+      titleEl.value  = "";
       startHEl.value = ""; startMEl.value = "";
       endHEl.value   = ""; endMEl.value   = "";
       selectedDays.clear();
@@ -472,8 +537,9 @@ async function showActiveQuestForm(modal) {
       previewEl.style.display = "none";
       await renderSavedActiveQuests(listEl);
       await refreshQuestCards();
-    } catch(err) {
-      console.error(err); showError(errorEl,"Failed to save. Try again.");
+    } catch (err) {
+      console.error(err);
+      showError(errorEl, "Failed to save. Try again.");
     }
     addBtn.disabled = false;
   };
@@ -486,11 +552,11 @@ async function showUrgentQuestForm(modal) {
   const user = auth.currentUser;
   const snap = user ? await getDoc(doc(firestore,"gameData",user.uid)) : null;
   const data = snap?.exists() ? snap.data() : {};
-  const player = data.player || {};
-  const thisWeek  = getISOWeek(new Date());
-  const urgentWeek = data.quests?.urgentWeek || { week: thisWeek, quests: [] };
+  const player     = data.player || {};
+  const thisWeek   = getISOWeek(new Date());
+  const urgentWeek = data.quests?.urgentWeek    || { week: thisWeek, quests: [] };
   const urgentNext = data.quests?.urgentNextWeek || [];
-  const thisCount  = urgentWeek.week===thisWeek ? (urgentWeek.quests||[]).length : 0;
+  const thisCount  = urgentWeek.week === thisWeek ? (urgentWeek.quests||[]).length : 0;
   const nextCount  = urgentNext.length;
 
   modal.innerHTML = `
@@ -521,17 +587,16 @@ async function showUrgentQuestForm(modal) {
   `;
   modal.querySelector(".quest-back").onclick = () => showQuestTypeList(modal);
 
-  // Helper: re-fetch counts and update all badges in the urgent form
   async function refreshUrgentCounts() {
     if (!user) return;
     const freshSnap = await getDoc(doc(firestore,"gameData",user.uid));
     if (!freshSnap.exists()) return;
-    const d2         = freshSnap.data();
-    const cw         = getISOWeek(new Date());
-    const uWeek      = d2.quests?.urgentWeek    || { week:cw, quests:[] };
-    const uNext      = d2.quests?.urgentNextWeek || [];
-    const tc = uWeek.week===cw ? (uWeek.quests||[]).length : 0;
-    const nc = uNext.length;
+    const d2    = freshSnap.data();
+    const cw    = getISOWeek(new Date());
+    const uWeek = d2.quests?.urgentWeek    || { week:cw, quests:[] };
+    const uNext = d2.quests?.urgentNextWeek || [];
+    const tc    = uWeek.week===cw ? (uWeek.quests||[]).length : 0;
+    const nc    = uNext.length;
     const badge      = modal.querySelector("#uq-count-badge");
     const thisLabel  = modal.querySelector("#uq-this-label");
     const nextLabel  = modal.querySelector("#uq-next-label");
@@ -540,12 +605,12 @@ async function showUrgentQuestForm(modal) {
     if (nextLabel) nextLabel.textContent = `Queued — Next Week (${nc}/3)`;
   }
 
-  const titleEl   = modal.querySelector("#uq-title");
-  const daysEl    = modal.querySelector("#uq-days");
-  const dlLabel   = modal.querySelector("#uq-dl-label");
-  const previewEl = modal.querySelector("#uq-preview");
-  const errorEl   = modal.querySelector("#uq-error");
-  const addBtn    = modal.querySelector("#uq-add");
+  const titleEl    = modal.querySelector("#uq-title");
+  const daysEl     = modal.querySelector("#uq-days");
+  const dlLabel    = modal.querySelector("#uq-dl-label");
+  const previewEl  = modal.querySelector("#uq-preview");
+  const errorEl    = modal.querySelector("#uq-error");
+  const addBtn     = modal.querySelector("#uq-add");
   const thisListEl = modal.querySelector("#uq-this-list");
   const nextListEl = modal.querySelector("#uq-next-list");
 
@@ -574,20 +639,20 @@ async function showUrgentQuestForm(modal) {
     errorEl.style.display = "none";
     const title = titleEl.value.trim();
     const days  = parseInt(daysEl.value);
-    if (!title)                    return showError(errorEl,"Quest title is required.");
-    if (!days||days<1||days>7)     return showError(errorEl,"Deadline must be 1–7 days.");
-    if (!user)                     return showError(errorEl,"Not logged in.");
+    if (!title)                return showError(errorEl, "Quest title is required.");
+    if (!days||days<1||days>7) return showError(errorEl, "Deadline must be 1–7 days.");
+    if (!user)                 return showError(errorEl, "Not logged in.");
     addBtn.disabled = true;
     try {
       const gameRef = doc(firestore,"gameData",user.uid);
       const snap2   = await getDoc(gameRef);
       if (!snap2.exists()) { showError(errorEl,"Player data not found."); addBtn.disabled=false; return; }
 
-      const d2         = snap2.data();
-      const cw         = getISOWeek(new Date());
-      const uWeek      = d2.quests?.urgentWeek    || { week:cw, quests:[] };
-      const uNext      = d2.quests?.urgentNextWeek || [];
-      if (uWeek.week!==cw) { uWeek.week=cw; uWeek.quests=[]; }
+      const d2    = snap2.data();
+      const cw    = getISOWeek(new Date());
+      const uWeek = d2.quests?.urgentWeek    || { week:cw, quests:[] };
+      const uNext = d2.quests?.urgentNextWeek || [];
+      if (uWeek.week !== cw) { uWeek.week=cw; uWeek.quests=[]; }
 
       if (uWeek.quests.length>=3 && uNext.length>=3) {
         showError(errorEl,"Max 3 quests this week + 3 queued for next week reached.");
@@ -595,7 +660,7 @@ async function showUrgentQuestForm(modal) {
       }
 
       const newQ = {
-        id:          `uq_${Date.now()}`,
+        id:           `uq_${Date.now()}`,
         title,
         deadlineDays: days,
         deadlineTs:   Date.now()+days*86400000,
@@ -631,7 +696,7 @@ async function renderSavedDailyQuests(listEl, countBadge) {
   if (!user) { listEl.innerHTML=`<div class="saved-quests-empty">Not logged in.</div>`; return; }
   listEl.innerHTML=`<div class="saved-quests-loading">Loading...</div>`;
   try {
-    const snap = await getDoc(doc(firestore,"gameData",user.uid));
+    const snap  = await getDoc(doc(firestore,"gameData",user.uid));
     if (!snap.exists()) { listEl.innerHTML=`<div class="saved-quests-empty">No data.</div>`; return; }
     const daily = snap.data().quests?.daily||[];
     if (countBadge) countBadge.textContent=`${daily.length} / 3`;
@@ -645,7 +710,7 @@ async function renderSavedDailyQuests(listEl, countBadge) {
     listEl.querySelectorAll(".quest-delete-btn").forEach(b=>{
       b.addEventListener("click",()=>showDeleteConfirm(b,+b.dataset.index,listEl,countBadge,"daily"));
     });
-  } catch { listEl.innerHTML=`<div class="saved-quests-empty">Failed to load.</div>`; }
+  } catch(e) { console.error(e); listEl.innerHTML=`<div class="saved-quests-empty">Failed to load.</div>`; }
 }
 
 async function renderSavedActiveQuests(listEl) {
@@ -653,12 +718,17 @@ async function renderSavedActiveQuests(listEl) {
   if (!user) { listEl.innerHTML=`<div class="saved-quests-empty">Not logged in.</div>`; return; }
   listEl.innerHTML=`<div class="saved-quests-loading">Loading...</div>`;
   try {
-    const snap = await getDoc(doc(firestore,"gameData",user.uid));
+    const snap   = await getDoc(doc(firestore,"gameData",user.uid));
     if (!snap.exists()) { listEl.innerHTML=`<div class="saved-quests-empty">No data.</div>`; return; }
     const active = snap.data().quests?.active||[];
     if (!active.length) { listEl.innerHTML=`<div class="saved-quests-empty">No active quests yet.</div>`; return; }
 
     listEl.innerHTML = active.map((q,i) => {
+      // Normalise days: Sleep quest stores [0,1,2,...], player quests store ["Mon","Tue",...]
+      const daysStr    = normaliseDays(q.days).join(", ");
+      const catDisplay = getCatDisplay(q.category);
+      const catClass   = getCatBadgeClass(q.category);
+
       // Permanent quests show a lock icon instead of a delete button
       const actionBtn = q.permanent === true
         ? `<div class="quest-lock-icon" title="This quest cannot be deleted">🔒</div>`
@@ -668,9 +738,9 @@ async function renderSavedActiveQuests(listEl) {
         <div class="saved-quest-item" data-index="${i}">
           <div class="saved-quest-info">
             <div class="saved-quest-text">${escapeHtml(q.title)}</div>
-            <div class="saved-quest-sub">${minsToTime(q.startMin)}–${minsToTime(q.endMin)} · ${(q.days||[]).join(", ")}</div>
+            <div class="saved-quest-sub">${minsToTime(q.startMin)} – ${minsToTime(q.endMin)} · ${daysStr}</div>
           </div>
-          <span class="saved-quest-badge ${(q.category||"").toLowerCase()}">${Array.isArray(q.category) ? q.category.join(" + ") : (q.category||"—")}</span>
+          <span class="saved-quest-badge ${catClass}">${escapeHtml(catDisplay)}</span>
           ${actionBtn}
         </div>`;
     }).join("");
@@ -678,7 +748,7 @@ async function renderSavedActiveQuests(listEl) {
     listEl.querySelectorAll(".quest-delete-btn").forEach(b=>{
       b.addEventListener("click",()=>showDeleteConfirm(b,+b.dataset.index,listEl,null,"active"));
     });
-  } catch { listEl.innerHTML=`<div class="saved-quests-empty">Failed to load.</div>`; }
+  } catch(e) { console.error(e); listEl.innerHTML=`<div class="saved-quests-empty">Failed to load.</div>`; }
 }
 
 async function renderSavedUrgentQuests(thisListEl, nextListEl) {
@@ -686,13 +756,13 @@ async function renderSavedUrgentQuests(thisListEl, nextListEl) {
   if (!user) { thisListEl.innerHTML=nextListEl.innerHTML=`<div class="saved-quests-empty">Not logged in.</div>`; return; }
   thisListEl.innerHTML=nextListEl.innerHTML=`<div class="saved-quests-loading">Loading...</div>`;
   try {
-    const snap = await getDoc(doc(firestore,"gameData",user.uid));
+    const snap  = await getDoc(doc(firestore,"gameData",user.uid));
     if (!snap.exists()) { thisListEl.innerHTML=nextListEl.innerHTML=`<div class="saved-quests-empty">No data.</div>`; return; }
-    const d         = snap.data();
-    const cw        = getISOWeek(new Date());
-    const uWeek     = d.quests?.urgentWeek    || { week:cw, quests:[] };
-    const uNext     = d.quests?.urgentNextWeek || [];
-    const wq        = uWeek.week===cw ? (uWeek.quests||[]) : [];
+    const d     = snap.data();
+    const cw    = getISOWeek(new Date());
+    const uWeek = d.quests?.urgentWeek    || { week:cw, quests:[] };
+    const uNext = d.quests?.urgentNextWeek || [];
+    const wq    = uWeek.week===cw ? (uWeek.quests||[]) : [];
 
     // This week
     if (!wq.length) {
@@ -732,7 +802,7 @@ async function renderSavedUrgentQuests(thisListEl, nextListEl) {
         b.addEventListener("click",()=>showDeleteConfirm(b,+b.dataset.index,nextListEl,null,"urgentNextWeek"));
       });
     }
-  } catch { thisListEl.innerHTML=`<div class="saved-quests-empty">Failed to load.</div>`; }
+  } catch(e) { console.error(e); thisListEl.innerHTML=`<div class="saved-quests-empty">Failed to load.</div>`; }
 }
 
 // ===============================
@@ -740,58 +810,51 @@ async function renderSavedUrgentQuests(thisListEl, nextListEl) {
 // ===============================
 
 /**
- * Show delete confirmation for a quest row.
- *
- * Guard: if the delete button carries data-permanent="true", the quest
- * is permanent (e.g. the Sleep quest) and cannot be deleted.
- * The button briefly dims to give visual feedback, then returns early.
- * This check is based on the Firestore `permanent` flag — not the quest
- * title — so a player naming their own quest "Sleep" is unaffected.
+ * Guard: if data-permanent="true" the quest cannot be deleted.
+ * Tied to the Firestore `permanent` flag — not the quest title —
+ * so a player naming their own quest "Sleep" is unaffected.
  */
 function showDeleteConfirm(btn, index, listEl, countBadge, scope) {
-  // Permanent quests cannot be deleted — flash button and bail
   if (btn.dataset.permanent === "true") {
     btn.style.opacity = "0.2";
     setTimeout(() => { btn.style.opacity = ""; }, 600);
     return;
   }
-
   const item = btn.closest(".saved-quest-item");
   btn.replaceWith(createConfirmButtons(index, item, listEl, countBadge, scope));
 }
 
 function createConfirmButtons(index, item, listEl, countBadge, scope) {
-  const wrap = document.createElement("div");
+  const wrap   = document.createElement("div");
   wrap.className = "quest-delete-confirm";
   const yesBtn = document.createElement("button");
-  yesBtn.className="quest-delete-confirm-yes"; yesBtn.textContent="DEL";
+  yesBtn.className = "quest-delete-confirm-yes"; yesBtn.textContent = "DEL";
   const noBtn  = document.createElement("button");
-  noBtn.className="quest-delete-confirm-no";  noBtn.textContent="NO";
+  noBtn.className  = "quest-delete-confirm-no";  noBtn.textContent = "NO";
 
   yesBtn.onclick = async () => {
-    yesBtn.disabled=noBtn.disabled=true;
+    yesBtn.disabled = noBtn.disabled = true;
     item.style.opacity="0.4"; item.style.transition="opacity 0.2s";
     const ok = await deleteQuestFromFirestore(index, scope);
     if (ok) {
-      if (scope==="daily")           await renderSavedDailyQuests(listEl, countBadge);
-      else if (scope==="active")     await renderSavedActiveQuests(listEl);
-      else if (scope==="urgentWeek"||scope==="urgentNextWeek") {
+      if (scope === "daily")         await renderSavedDailyQuests(listEl, countBadge);
+      else if (scope === "active")   await renderSavedActiveQuests(listEl);
+      else if (scope === "urgentWeek" || scope === "urgentNextWeek") {
         const allLists = listEl.closest(".quest-modal").querySelectorAll(".saved-quests-list");
         const arr = [...allLists];
         const tl  = arr.find(el=>el.id==="uq-this-list") || arr[arr.length-2];
         const nl  = arr.find(el=>el.id==="uq-next-list") || arr[arr.length-1];
         await renderSavedUrgentQuests(tl, nl);
-        // Refresh urgent count badges
         const badge     = listEl.closest(".quest-modal")?.querySelector("#uq-count-badge");
         const thisLabel = listEl.closest(".quest-modal")?.querySelector("#uq-this-label");
         const nextLabel = listEl.closest(".quest-modal")?.querySelector("#uq-next-label");
-        const _currentUser = auth.currentUser;
-        if (badge && _currentUser) {
-          const freshSnap = await getDoc(doc(firestore,"gameData",_currentUser.uid));
+        const cu = auth.currentUser;
+        if (badge && cu) {
+          const freshSnap = await getDoc(doc(firestore,"gameData",cu.uid));
           if (freshSnap.exists()) {
             const d2 = freshSnap.data();
             const cw = getISOWeek(new Date());
-            const uw = d2.quests?.urgentWeek || { week:cw, quests:[] };
+            const uw = d2.quests?.urgentWeek    || { week:cw, quests:[] };
             const un = d2.quests?.urgentNextWeek || [];
             const tc = uw.week===cw ? (uw.quests||[]).length : 0;
             const nc = un.length;
@@ -801,22 +864,25 @@ function createConfirmButtons(index, item, listEl, countBadge, scope) {
           }
         }
       }
-      // Refresh main quest cards immediately after any delete
       await refreshQuestCards();
     } else {
-      item.style.opacity="1";
+      item.style.opacity = "1";
       wrap.replaceWith(restoreDeleteBtn(index, listEl, countBadge, scope));
     }
   };
   noBtn.onclick = () => wrap.replaceWith(restoreDeleteBtn(index, listEl, countBadge, scope));
-  wrap.appendChild(yesBtn); wrap.appendChild(noBtn);
+  wrap.appendChild(yesBtn);
+  wrap.appendChild(noBtn);
   return wrap;
 }
 
 function restoreDeleteBtn(index, listEl, countBadge, scope) {
   const btn = document.createElement("button");
-  btn.className="quest-delete-btn"; btn.dataset.index=index; btn.title="Delete"; btn.textContent="✕";
-  btn.addEventListener("click",()=>showDeleteConfirm(btn,index,listEl,countBadge,scope));
+  btn.className = "quest-delete-btn";
+  btn.dataset.index = index;
+  btn.title = "Delete";
+  btn.textContent = "✕";
+  btn.addEventListener("click", () => showDeleteConfirm(btn, index, listEl, countBadge, scope));
   return btn;
 }
 
@@ -829,24 +895,27 @@ async function deleteQuestFromFirestore(index, scope) {
     const d = snap.data();
     let arr, key;
 
-    if (scope==="daily")           { arr=d.quests?.daily||[];            key="quests.daily"; }
-    else if (scope==="active")     {
+    if (scope === "daily") {
+      arr = d.quests?.daily || [];
+      key = "quests.daily";
+    } else if (scope === "active") {
       arr = d.quests?.active || [];
-      // Final server-side guard — never delete a permanent quest
+      // Server-side guard — never delete a permanent quest
       if (arr[index]?.permanent === true) return false;
       key = "quests.active";
-    }
-    else if (scope==="urgentNextWeek") { arr=d.quests?.urgentNextWeek||[]; key="quests.urgentNextWeek"; }
-    else if (scope==="urgentWeek") {
+    } else if (scope === "urgentNextWeek") {
+      arr = d.quests?.urgentNextWeek || [];
+      key = "quests.urgentNextWeek";
+    } else if (scope === "urgentWeek") {
       const uw = d.quests?.urgentWeek || { week:"", quests:[] };
-      uw.quests.splice(index,1);
-      await updateDoc(gameRef,{ "quests.urgentWeek":uw, updatedAt:Date.now() });
+      uw.quests.splice(index, 1);
+      await updateDoc(gameRef, { "quests.urgentWeek": uw, updatedAt: Date.now() });
       return true;
     } else return false;
 
-    if (index<0||index>=arr.length) return false;
-    arr.splice(index,1);
-    await updateDoc(gameRef,{ [key]:arr, updatedAt:Date.now() });
+    if (index < 0 || index >= arr.length) return false;
+    arr.splice(index, 1);
+    await updateDoc(gameRef, { [key]: arr, updatedAt: Date.now() });
     return true;
   } catch(e) { console.error(e); return false; }
 }
@@ -856,16 +925,18 @@ async function deleteQuestFromFirestore(index, scope) {
 // ===============================
 function openCreateQuestModal() {
   if (document.querySelector(".quest-overlay")) return;
-  const overlay = document.createElement("div"); overlay.className="quest-overlay";
-  const modal   = document.createElement("div"); modal.className="quest-modal";
+  const overlay = document.createElement("div"); overlay.className = "quest-overlay";
+  const modal   = document.createElement("div"); modal.className   = "quest-modal";
   showQuestTypeList(modal);
-  overlay.appendChild(modal); document.body.appendChild(overlay);
-  document.body.style.overflow="hidden";
-  overlay.addEventListener("click",e=>{ if(e.target===overlay) closeCreateQuestModal(); });
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  document.body.style.overflow = "hidden";
+  overlay.addEventListener("click", e => { if (e.target === overlay) closeCreateQuestModal(); });
 }
+
 function closeCreateQuestModal() {
   document.querySelector(".quest-overlay")?.remove();
-  document.body.style.overflow="";
+  document.body.style.overflow = "";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -880,9 +951,9 @@ async function addDailyQuestToFirestore(taskText, category) {
   const user = auth.currentUser; if (!user) return false;
   const gameRef = doc(firestore,"gameData",user.uid);
   const snap    = await getDoc(gameRef); if (!snap.exists()) return false;
-  const daily = snap.data().quests?.daily||[];
-  if (daily.length>=3) { alert("Maximum daily quests already added."); return false; }
-  daily.push({ text:taskText, category, createdAt:Date.now() });
-  await updateDoc(gameRef,{ "quests.daily":daily, updatedAt:Date.now() });
+  const daily   = snap.data().quests?.daily || [];
+  if (daily.length >= 3) { alert("Maximum daily quests already added."); return false; }
+  daily.push({ text: taskText, category, createdAt: Date.now() });
+  await updateDoc(gameRef, { "quests.daily": daily, updatedAt: Date.now() });
   return true;
 }
