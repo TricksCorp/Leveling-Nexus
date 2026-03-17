@@ -836,7 +836,7 @@ onAuthStateChanged(auth, async (user) => {
 
     // Guard — already evaluated, skip to home
     if (data.player?.evaluationDone === true) {
-      window.location.href = "home.html";
+      window.location.href = "Home.html";
       return;
     }
 
