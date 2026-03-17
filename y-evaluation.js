@@ -785,7 +785,7 @@ async function saveResults(level, strStat, intStat) {
 
     setProgress("Results saved! Entering the Nexus...");
     setTimeout(() => {
-      window.location.href = "home.html";
+      window.location.href = "Home.html";
     }, 1000);
 
   } catch (err) {
@@ -836,7 +836,7 @@ onAuthStateChanged(auth, async (user) => {
 
     // Guard — already evaluated, skip to home
     if (data.player?.evaluationDone === true) {
-      window.location.href = "/LEVELING-NEXUS/Login.html";
+      window.location.href = "Home.html";
       return;
     }
 
