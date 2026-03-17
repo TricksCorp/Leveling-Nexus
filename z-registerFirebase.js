@@ -39,18 +39,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // ── Password show/hide toggle ──
   const passwordInput = document.getElementById("password");
   if (passwordInput) {
-    // Wrap the input in a relative container
     const wrapper = document.createElement("div");
     wrapper.style.cssText = "position:relative;display:flex;align-items:center;width:100%;";
     passwordInput.parentNode.insertBefore(wrapper, passwordInput);
     wrapper.appendChild(passwordInput);
 
-    // Give the input right padding so text doesn't overlap the button
-    passwordInput.style.paddingRight  = "42px";
-    passwordInput.style.width         = "100%";
-    passwordInput.style.boxSizing     = "border-box";
+    passwordInput.style.paddingRight = "42px";
+    passwordInput.style.width        = "100%";
+    passwordInput.style.boxSizing    = "border-box";
 
-    // Build the toggle button
     const toggleBtn = document.createElement("button");
     toggleBtn.type      = "button";
     toggleBtn.innerHTML = "👁";
@@ -69,25 +66,22 @@ document.addEventListener("DOMContentLoaded", () => {
       user-select: none;
     `;
 
-    // Hover glow
     toggleBtn.addEventListener("mouseenter", () => {
       toggleBtn.style.color = "rgba(65,182,255,0.9)";
     });
     toggleBtn.addEventListener("mouseleave", () => {
-      // Stay bright if password is currently visible
       toggleBtn.style.color = passwordInput.type === "text"
         ? "rgba(65,182,255,0.9)"
         : "rgba(65,182,255,0.5)";
     });
 
-    // Click: toggle between hidden and visible
     toggleBtn.addEventListener("click", () => {
       const isHidden = passwordInput.type === "password";
-      passwordInput.type      = isHidden ? "text"     : "password";
-      toggleBtn.innerHTML     = "👁";
-      toggleBtn.style.color   = isHidden
-        ? "rgba(65,182,255,0.9)"   // visible  → bright
-        : "rgba(65,182,255,0.5)";  // hidden   → dim
+      passwordInput.type    = isHidden ? "text" : "password";
+      toggleBtn.innerHTML   = "👁"; // ✅ always eye, no monkey
+      toggleBtn.style.color = isHidden
+        ? "rgba(65,182,255,0.9)"  // visible → bright
+        : "rgba(65,182,255,0.5)"; // hidden  → dim
     });
 
     wrapper.appendChild(toggleBtn);
@@ -318,13 +312,11 @@ document.getElementById("submit").addEventListener("click", async (event) => {
     return;
   }
 
-  // ✅ Username length guard (backup for maxLength)
   if (username.length > 13) {
     setStatus("Username must be 13 characters or fewer.", true);
     return;
   }
 
-  // Password policy
   if (password.length < 8) {
     setStatus("Password must be at least 8 characters.", true);
     return;
