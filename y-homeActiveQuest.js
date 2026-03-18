@@ -78,6 +78,9 @@ _style.textContent = `
 }
 .haq-category.strength     { color: #ff8080; }
 .haq-category.intelligence { color: #41b6ff; }
+.haq-category.stamina      { color: #41ff88; }
+.haq-category.health       { color: #41ff88; }
+.haq-category.multi        { color: #41ff88; }
 
 .haq-time {
   font-family: "Orbitron", system-ui;
@@ -129,7 +132,7 @@ _style.textContent = `
   transition: all 0.2s ease;
   align-self: flex-start;
 }
-.haq-goto-btn:hover { transform: translateY(-1px); box-shadow: 0 0 14px rgba(65,182,255,0.8); }
+.haq-goto-btn:hover  { transform: translateY(-1px); box-shadow: 0 0 14px rgba(65,182,255,0.8); }
 .haq-goto-btn:active { transform: translateY(0); }
 
 /* Phase badge (accepted/missed) */
@@ -139,8 +142,8 @@ _style.textContent = `
   padding: 3px 8px; border-radius: 6px; white-space: nowrap;
   align-self: flex-start; margin-top: 4px;
 }
-.haq-phase-badge.accepted { background: rgba(65,255,130,0.1); border: 1px solid rgba(65,255,130,0.4); color: #41ff88; }
-.haq-phase-badge.missed   { background: rgba(255,80,80,0.1);  border: 1px solid rgba(255,80,80,0.3);  color: #ff6b6b; }
+.haq-phase-badge.accepted { background: rgba(65,255,130,0.1);  border: 1px solid rgba(65,255,130,0.4); color: #41ff88; }
+.haq-phase-badge.missed   { background: rgba(255,80,80,0.1);   border: 1px solid rgba(255,80,80,0.3);  color: #ff6b6b; }
 
 /* Empty state */
 .haq-empty {
@@ -152,15 +155,49 @@ _style.textContent = `
 document.head.appendChild(_style);
 
 // ===============================
-// HELPERS  (mirrors y-questSystem)
+// HELPERS
 // ===============================
+
+// Day number (0=Sun … 6=Sat) → abbreviation
+const DAY_NUM_TO_ABBR = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+/**
+ * Normalise a quest's days array to abbreviation strings.
+ * Handles both number format [0,1,2,...] (Sleep quest from evaluation)
+ * and string format ["Mon","Tue",...] (player-created quests).
+ */
+function normaliseDays(days) {
+  if (!Array.isArray(days)) return [];
+  return days.map(d => typeof d === "number" ? (DAY_NUM_TO_ABBR[d] || String(d)) : d);
+}
+
+/**
+ * Returns the CSS class for a category.
+ * Arrays with multiple entries → "multi" (green).
+ */
+function getCatClass(category) {
+  if (Array.isArray(category)) {
+    return category.length > 1 ? "multi" : (category[0] || "").toLowerCase();
+  }
+  return (category || "").toLowerCase();
+}
+
+/**
+ * Returns the display string for a category.
+ * Arrays are joined as "Health + Stamina".
+ */
+function getCatDisplay(category) {
+  if (Array.isArray(category)) return category.join(" + ");
+  return category || "—";
+}
+
 function getTodayKey() {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
 
 function getTodayAbbr() {
-  return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
+  return DAY_NUM_TO_ABBR[new Date().getDay()];
 }
 
 function minsToTime(tot) {
@@ -187,7 +224,9 @@ function getTodaySchedule(quest) {
 
 function getQuestPhase(quest) {
   const today = getTodayAbbr();
-  if (!(quest.days || []).includes(today)) return "not-today";
+  // normaliseDays converts number-based days (Sleep quest) to abbreviations
+  // before comparing, so Sleep always matches correctly
+  if (!normaliseDays(quest.days).includes(today)) return "not-today";
 
   const { startMs, endMs } = getTodaySchedule(quest);
   const now   = Date.now();
@@ -216,36 +255,38 @@ const _haqTimers = new Map();
 // BUILD ROW
 // ===============================
 function buildHomeActiveRow(quest, player) {
-  const phase      = getQuestPhase(quest);
+  const phase          = getQuestPhase(quest);
   const { startMs, endMs } = getTodaySchedule(quest);
-  const graceMs    = endMs + 30 * 60_000;
-  const catClass   = (quest.category || "").toLowerCase();
+  const graceMs        = endMs + 30 * 60_000;
+
+  // category can be a string or an array — normalise for display
+  const catClass   = getCatClass(quest.category);
+  const catDisplay = getCatDisplay(quest.category);
+
   const baseXP     = calcActiveXP(quest, player);
-  const todayKey      = getTodayKey();
-  // Use a function so the live tick always reads the current quest state,
-  // not a stale snapshot captured at row-build time.
+  const todayKey   = getTodayKey();
   const getIsAccepted = () =>
     quest.acceptedToday === true && quest.acceptedDateKey === todayKey;
 
   const row = document.createElement("div");
   row.className = "haq-row";
 
-  // Header
+  // ── Header ──
   const header = document.createElement("div");
   header.className = "haq-header";
   header.innerHTML = `
     <div class="haq-title">${quest.title}</div>
-    <div class="haq-category ${catClass}">${quest.category}</div>
+    <div class="haq-category ${catClass}">${catDisplay}</div>
   `;
   row.appendChild(header);
 
-  // Time label
+  // ── Time label ──
   const timeLabel = document.createElement("div");
   timeLabel.className = "haq-time";
   timeLabel.textContent = `${minsToTime(quest.startMin)} – ${minsToTime(quest.endMin)}`;
   row.appendChild(timeLabel);
 
-  // Timer bar
+  // ── Timer bar ──
   const barWrap = document.createElement("div");
   barWrap.className = "haq-bar-wrap";
   const barFill = document.createElement("div");
@@ -253,38 +294,38 @@ function buildHomeActiveRow(quest, player) {
   barWrap.appendChild(barFill);
   row.appendChild(barWrap);
 
-  // Countdown
+  // ── Countdown ──
   const countdown = document.createElement("div");
   countdown.className = "haq-countdown";
   row.appendChild(countdown);
 
-  // XP
+  // ── XP ──
   const xpLabel = document.createElement("div");
   xpLabel.className = "haq-xp";
   xpLabel.textContent = `XP: ${baseXP.toLocaleString()} × lvl`;
   row.appendChild(xpLabel);
 
-  // Action area — rebuilt every tick so accepted state updates without refresh
+  // ── Action area ──
   const actionArea = document.createElement("div");
   row.appendChild(actionArea);
 
   function refreshActionArea(currentPhase) {
     const accepted = getIsAccepted();
-    // Only rebuild if state actually changed
     const key = `${currentPhase}-${accepted}`;
     if (actionArea.dataset.key === key) return;
     actionArea.dataset.key = key;
-    actionArea.innerHTML = "";
+    actionArea.innerHTML   = "";
     actionArea.style.cssText = "";
 
     if ((currentPhase === "final-window" || currentPhase === "grace") && !accepted) {
       // Missed window
       const badge = document.createElement("span");
-      badge.className   = "haq-phase-badge missed";
-      badge.textContent = "MISSED — Go to Quest";
+      badge.className    = "haq-phase-badge missed";
+      badge.textContent  = "MISSED — Go to Quest";
       badge.style.cursor = "pointer";
-      badge.onclick = () => toQuest();
+      badge.onclick      = () => toQuest();
       actionArea.appendChild(badge);
+
     } else if (accepted) {
       // Accepted — show badge + Go To Quest
       actionArea.style.cssText = "display:flex;align-items:center;gap:8px;margin-top:4px;";
@@ -293,17 +334,18 @@ function buildHomeActiveRow(quest, player) {
       badge.textContent = "ACCEPTED";
       actionArea.appendChild(badge);
       const btn = document.createElement("button");
-      btn.className   = "haq-goto-btn";
-      btn.textContent = "GO TO QUEST";
+      btn.className       = "haq-goto-btn";
+      btn.textContent     = "GO TO QUEST";
       btn.style.marginTop = "0";
-      btn.onclick = () => toQuest();
+      btn.onclick         = () => toQuest();
       actionArea.appendChild(btn);
+
     } else {
       // Pending / available
       const btn = document.createElement("button");
       btn.className   = "haq-goto-btn";
       btn.textContent = "GO TO QUEST";
-      btn.onclick = () => toQuest();
+      btn.onclick     = () => toQuest();
       actionArea.appendChild(btn);
     }
   }
@@ -348,7 +390,6 @@ function buildHomeActiveRow(quest, player) {
     countdown.className   = cdClass;
     countdown.textContent = cdText;
 
-    // Refresh action area so accept state changes are reflected immediately
     refreshActionArea(currentPhase);
   }
 
@@ -358,6 +399,13 @@ function buildHomeActiveRow(quest, player) {
   _haqTimers.set(quest.id, timerHandle);
 
   return row;
+}
+
+// ===============================
+// NAVIGATION HELPER
+// ===============================
+function toQuest() {
+  window.location.href = "/LEVELING-NEXUS/Quest.html";
 }
 
 // ===============================
@@ -375,15 +423,13 @@ function renderHomeActiveQuests(activeQuests, player) {
   const container = document.getElementById("quest-list");
   if (!container) return;
 
-  // Show loading until first render
   if (!container.dataset.loaded) {
     container.innerHTML = `<div class="haq-empty" style="color:rgba(65,182,255,0.4);">Loading...</div>`;
   }
 
-  // Clear old timers
   _haqTimers.forEach(t => clearInterval(t));
   _haqTimers.clear();
-  container.innerHTML = "";
+  container.innerHTML      = "";
   container.dataset.loaded = "true";
 
   const todayKey = getTodayKey();
@@ -391,11 +437,8 @@ function renderHomeActiveQuests(activeQuests, player) {
   const relevant = activeQuests.filter(q => {
     const phase = getQuestPhase(q);
     if (phase === "not-today" || phase === "too-early" || phase === "expired") return false;
-    // Hide rejected-today quests
-    if (q.rejectedToday === true && q.rejectedDateKey === todayKey) return false;
-    // Hide completed-today quests
+    if (q.rejectedToday  === true && q.rejectedDateKey  === todayKey) return false;
     if (q.completedToday === true && q.completedDateKey === todayKey) return false;
-    // Hide if expired penalty already applied today
     if (q.expiredPenaltyDate === todayKey) return false;
     return true;
   });
@@ -424,7 +467,6 @@ setInterval(() => {
 // ===============================
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    // Clear all running timers on logout
     _haqTimers.forEach(t => clearInterval(t));
     _haqTimers.clear();
     _haqPollData = null;
