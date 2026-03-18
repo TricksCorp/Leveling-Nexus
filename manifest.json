@@ -11,13 +11,13 @@
   "categories": ["lifestyle", "productivity", "games"],
   "icons": [
     {
-      "src": "/LEVELING-NEXUS/Logo.png",
+      "src": "/LEVELING-NEXUS/AppIcon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/LEVELING-NEXUS/Logo.png",
+      "src": "/LEVELING-NEXUS/AppIcon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
