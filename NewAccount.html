@@ -7,10 +7,43 @@
     
     <link rel="manifest" href="/LEVELING-NEXUS/manifest.json" />
 <meta name="theme-color" content="#000000" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-<meta name="apple-mobile-web-app-title" content="LEVELING NEXUS" />
+
+    
+<!-- =====================================================
+     LEVELING NEXUS — PWA Meta Tags (add to ALL HTML pages)
+     Place inside <head> of Login.html and every other page
+     ===================================================== -->
+
+<!-- Core PWA / Standalone mode -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NEXUS">
+
+<!-- Suppress browser chrome & loading bar -->
+<meta name="theme-color" content="#000000">
+<meta name="msapplication-navbutton-color" content="#000000">
+<meta name="msapplication-starturl" content="/LEVELING-NEXUS/Login.html">
+
+<!-- Splash screens (iOS — optional but prevents white flash) -->
+<link rel="apple-touch-icon" href="/LEVELING-NEXUS/AppIcon.png">
+<link rel="apple-touch-startup-image" href="/LEVELING-NEXUS/AppIcon.png">
+
+<!-- Manifest -->
+<link rel="manifest" href="/LEVELING-NEXUS/manifest.json">
+
+<!-- =====================================================
+     INLINE STYLE — also add this inside <style> or a
+     linked CSS file to kill any residual white flash
+     ===================================================== -->
+<style>
+  /* Prevent white flash on page load in standalone PWA */
+  html, body {
+    background-color: #000000 !important;
+    margin: 0;
+    padding: 0;
+  }
+</style>
 
 <link rel="stylesheet" href="style.css">
 <script type="module" src="z-registerFirebase.js"></script>
