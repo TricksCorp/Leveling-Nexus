@@ -9,6 +9,10 @@
   "background_color": "#000000",
   "theme_color": "#000000",
   "categories": ["lifestyle", "productivity", "games"],
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/LEVELING-NEXUS/AppIconSmall.png",
