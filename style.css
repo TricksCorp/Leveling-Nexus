@@ -437,8 +437,7 @@
 
 .leaderboard .leaderboard-list {
   margin-top: 20px;
-  max-height: 400px;
-  overflow-y: auto;
+  overflow-y: visible;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -476,7 +475,7 @@
 
 .leaderboard .your-current-rank {
   background: var(--panel); border-radius: var(--radius); padding: 16px;
-  margin-top: 20px; position: sticky; bottom: 20px;
+  margin-top: 20px; position: static;
   box-shadow: 0 4px 20px rgba(0,0,0,0.6);
 }
 .leaderboard .your-current-rank .section-title { color: var(--neon); font-size: 18px; margin-bottom: 12px; }
@@ -908,10 +907,7 @@
     justify-content: center;
   }
 
-  /* ── Leaderboard: taller list ── */
-  .leaderboard .leaderboard-list {
-    max-height: 340px;
-  }
+  /* ── Leaderboard: all entries visible, no cap ── */
 
   /* ── Leaderboard: smaller entry text ── */
   .leaderboard .leaderboard-entry .entry-rank { font-size: 14px; }
@@ -1142,9 +1138,6 @@
     padding: 8px 10px;
   }
 
-  /* ── Leaderboard: shorter list ── */
-  .leaderboard .leaderboard-list {
-    max-height: 280px;
-  }
+  /* ── Leaderboard: no max-height cap ── */
 
 }
