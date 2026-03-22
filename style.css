@@ -2,7 +2,7 @@
    LEVELING NEXUS — style.css
    Sections: Root · Website · Login · New-Player · Home ·
              Leaderboard · Profile · Quest · Nav Fix ·
-             Mobile Bottom Nav · Stylized Page Emblems
+             Mobile Bottom Nav · Mobile Logo Styling
    ============================================================ */
 
 /* ── Google Font ── */
@@ -30,8 +30,6 @@
 
 /* ============================================================
    SHARED HEADER  (home · quest · leaderboard · profile)
-   All four pages have identical header structure:
-   logo + subtitle on the left, nav-buttons on the right.
    ============================================================ */
 
 .home header,
@@ -81,42 +79,6 @@
 
 
 /* ============================================================
-   STYLIZED PAGE EMBLEM SVGs
-   Each page gets a unique logo-like emblem that replaces
-   the plain text title on mobile. The emblems are inline SVGs
-   placed in the header alongside .logo.
-
-   On PC  → .page-emblem hidden,  .logo-text shown
-   On mob → .page-emblem shown,   .logo-text hidden
-
-   Wrap your existing logo text in:
-     <span class="logo-text">LEVELING NEXUS</span>
-   And place the matching emblem SVG right after it inside
-   the .logo element (or directly in the header).
-
-   Full emblem markup is at the bottom of this file.
-   ============================================================ */
-
-/* Base — hidden on PC, revealed on mobile */
-.page-emblem {
-  display: none;
-  flex-shrink: 0;
-  /* height is set per-emblem below so each can be its natural aspect ratio */
-}
-
-/* The text portion of the logo — shown on PC, hidden on mobile */
-.logo-text {
-  display: inline;
-}
-
-/* Per-emblem height overrides */
-.page-emblem--home        { height: 52px; }
-.page-emblem--quest       { height: 52px; }
-.page-emblem--leaderboard { height: 52px; }
-.page-emblem--profile     { height: 52px; }
-
-
-/* ============================================================
    WEBSITE PAGE
    ============================================================ */
 .website {
@@ -134,7 +96,6 @@
   box-shadow: 0 0 25px rgba(0,110,255,0.6);
 }
 
-/* Hero */
 .website .hero {
   text-align: center;
   padding: clamp(60px,10vw,100px) 20px;
@@ -153,13 +114,11 @@
   opacity: 0.85;
 }
 
-/* Section wrapper */
 .website .section {
   width: 90%;
   margin: 50px auto;
 }
 
-/* Features grid */
 .website .features-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -175,7 +134,6 @@
 }
 .website .feature-box h3 { color: #8bc9ff; }
 
-/* Sign-in panel */
 .website .signin-panel {
   text-align: center;
   margin-top: 40px;
@@ -205,7 +163,6 @@
 .website .signin-btn:hover,
 .website .btn-link:hover { background: rgba(0,180,255,1); }
 
-/* Footer */
 .website footer {
   margin-top: 80px;
   padding: 30px 20px;
@@ -214,8 +171,8 @@
   text-align: center;
   color: #bcd9ff;
 }
-.website footer a          { color: #7ac8ff; text-decoration: none; }
-.website footer a:hover    { text-decoration: underline; }
+.website footer a       { color: #7ac8ff; text-decoration: none; }
+.website footer a:hover { text-decoration: underline; }
 
 
 /* ============================================================
@@ -265,8 +222,8 @@
   margin-bottom: 20px;
 }
 
-.login .input-field        { width: 100%; margin-top: 15px; }
-.login .input-field input  {
+.login .input-field       { width: 100%; margin-top: 15px; }
+.login .input-field input {
   width: 100%; padding: 14px;
   border-radius: 10px;
   border: 1px solid rgba(80,150,255,0.5);
@@ -292,7 +249,7 @@
 
 
 /* ============================================================
-   NEW PLAYER PAGE  (identical pattern to login)
+   NEW PLAYER PAGE
    ============================================================ */
 .new-player {
   margin: 0;
@@ -338,8 +295,8 @@
   margin-bottom: 20px;
 }
 
-.new-player .input-field        { width: 100%; margin-top: 15px; }
-.new-player .input-field input  {
+.new-player .input-field       { width: 100%; margin-top: 15px; }
+.new-player .input-field input {
   width: 100%; padding: 14px;
   border-radius: 10px;
   border: 1px solid rgba(80,150,255,0.5);
@@ -401,7 +358,6 @@
   text-shadow: 0 0 6px rgba(65,182,255,0.25);
 }
 
-/* ── Stats grid: always 2×2, never collapses ── */
 .home .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -412,8 +368,8 @@
   background: var(--glass); padding: 14px;
   border-radius: 12px; border: 1px solid rgba(65,182,255,0.08); text-align: center;
 }
-.home .stat .label  { font-size: 12px; color: var(--muted); }
-.home .stat .value  { font-size: 18px; margin-top: 6px; color: #cfeeff; font-weight: 700; }
+.home .stat .label { font-size: 12px; color: var(--muted); }
+.home .stat .value { font-size: 18px; margin-top: 6px; color: #cfeeff; font-weight: 700; }
 
 .home .xp-block {
   margin-top: 8px; padding: 14px; border-radius: 10px;
@@ -575,11 +531,8 @@
 .profile .profile-detail .label      { font-weight: 700; color: var(--muted); }
 .profile .profile-detail .value      { color: var(--neon); }
 
-/* ── Profile stats grid: always 2×2 ── */
 .profile .stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
 }
 .profile .stat {
   background: var(--glass); padding: 14px;
@@ -596,8 +549,7 @@
 }
 .profile .logout-btn:hover { background: darkred; }
 
-/* Log card and logout button span full width */
-.profile .log-card            { grid-column: 1 / -1; }
+.profile .log-card             { grid-column: 1 / -1; }
 .profile .logout-btn-container { grid-column: 1 / -1; }
 
 
@@ -619,7 +571,6 @@
 
 .quest .container { width: 100%; margin: 0 auto; padding: 0 clamp(12px,2vw,32px); }
 
-/* Quest grid */
 .quest main.quest-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -633,7 +584,6 @@
   gap: 18px;
 }
 
-/* Cards */
 .quest .card {
   background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
   border-radius: var(--radius); padding: 16px;
@@ -646,7 +596,6 @@
   text-shadow: 0 0 6px rgba(65,182,255,0.25);
 }
 
-/* Quest list */
 .quest .quest-list {
   min-height: 180px;
   border-radius: 10px;
@@ -663,7 +612,6 @@
   border-radius: 6px; box-shadow: 0 0 6px rgba(65,182,255,0.6);
 }
 
-/* Add quest card */
 .quest .add-quest {
   display: flex; flex-direction: column;
   gap: 12px; align-items: center; justify-content: center;
@@ -678,7 +626,6 @@
 }
 .quest .quest-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.7); }
 
-/* Activity log */
 .quest .activity-log { margin-top: 10px; }
 .quest .log-content {
   min-height: 120px; font-size: 13px; color: var(--muted);
@@ -686,7 +633,6 @@
   border: 1px solid rgba(255,255,255,0.04);
 }
 
-/* Quest rows */
 .quest-row {
   width: 100%; box-sizing: border-box; overflow: hidden;
   display: flex; flex-direction: column;
@@ -741,8 +687,7 @@
 
 
 /* ============================================================
-   SHARED NAV BUTTONS  (home · quest · leaderboard · profile)
-   Visible on PC. On mobile the bottom nav bar takes over.
+   SHARED NAV BUTTONS
    ============================================================ */
 .home .nav-btn,
 .quest .nav-btn,
@@ -768,7 +713,8 @@
   box-shadow: 0 6px 18px rgba(0,120,220,0.35);
 }
 
-/* ── Live Clock ── */
+
+/* ── Clock Bar ── */
 .header-clock {
   align-items: center;
   justify-content: center;
@@ -793,15 +739,12 @@
   font-weight: 700;
   color: var(--neon);
   letter-spacing: 3px;
-  text-shadow:
-    0 0 10px rgba(65,182,255,0.55),
-    0 0 24px rgba(65,182,255,0.25);
+  text-shadow: 0 0 10px rgba(65,182,255,0.55), 0 0 24px rgba(65,182,255,0.25);
   line-height: 1;
 }
 
 .clock-sep {
-  width: 1px;
-  height: 18px;
+  width: 1px; height: 18px;
   background: rgba(65,182,255,0.2);
   flex-shrink: 0;
 }
@@ -828,106 +771,71 @@
 
 /* ============================================================
    MOBILE BOTTOM NAVIGATION BAR
-   Fixed to the bottom of the viewport on mobile only.
+   Fixed to bottom of viewport on mobile only.
    Covers: Home · Quest · Leaderboard · Profile
 
-   ── HTML to paste at the bottom of every inner page <body> ──
+   ── Paste this HTML at the bottom of every inner page <body> ──
 
    <nav class="mobile-bottom-nav">
-
-     <a href="home.html" class="mob-nav-item" aria-label="Home">
-       <svg class="mob-nav-icon" viewBox="0 0 24 24" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-         <!-- House outline with diamond window -->
+     <a href="home.html"        class="mob-nav-item" aria-label="Home">
+       <svg class="mob-nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
          <polygon points="12,3 22,11 20,11 20,21 15,21 15,15 9,15 9,21 4,21 4,11 2,11"
-                  stroke="currentColor" stroke-width="1.6"
-                  stroke-linejoin="round" fill="none"/>
+                  stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
          <polygon points="12,6.5 15.5,9.5 8.5,9.5"
                   stroke="currentColor" stroke-width="1" fill="currentColor" opacity="0.4"/>
        </svg>
        <span class="mob-nav-label">Home</span>
      </a>
-
-     <a href="quest.html" class="mob-nav-item" aria-label="Quests">
-       <svg class="mob-nav-icon" viewBox="0 0 24 24" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-         <!-- Sword / quest blade -->
-         <line x1="12" y1="3" x2="12" y2="17" stroke="currentColor"
-               stroke-width="1.8" stroke-linecap="round"/>
-         <line x1="8"  y1="14" x2="16" y2="14" stroke="currentColor"
-               stroke-width="1.6" stroke-linecap="round"/>
-         <path d="M11 17 Q12 21 13 17" stroke="currentColor"
-               stroke-width="1.4" fill="none" stroke-linecap="round"/>
+     <a href="quest.html"       class="mob-nav-item" aria-label="Quests">
+       <svg class="mob-nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+         <line x1="12" y1="3"  x2="12" y2="17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+         <line x1="8"  y1="14" x2="16" y2="14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+         <path d="M11 17 Q12 21 13 17" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/>
          <circle cx="12" cy="3" r="1.2" fill="currentColor" opacity="0.7"/>
        </svg>
        <span class="mob-nav-label">Quests</span>
      </a>
-
      <a href="leaderboard.html" class="mob-nav-item" aria-label="Leaderboard">
-       <svg class="mob-nav-icon" viewBox="0 0 24 24" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-         <!-- Trophy cup -->
-         <path d="M8 3h8v7a4 4 0 0 1-8 0V3z"
-               stroke="currentColor" stroke-width="1.6"
-               stroke-linejoin="round" fill="none"/>
-         <path d="M8 6H5a2 2 0 0 0 0 4h3" stroke="currentColor"
-               stroke-width="1.4" stroke-linecap="round" fill="none"/>
-         <path d="M16 6h3a2 2 0 0 1 0 4h-3" stroke="currentColor"
-               stroke-width="1.4" stroke-linecap="round" fill="none"/>
-         <line x1="12" y1="14" x2="12" y2="18" stroke="currentColor"
-               stroke-width="1.6" stroke-linecap="round"/>
-         <line x1="9"  y1="21" x2="15" y2="21" stroke="currentColor"
-               stroke-width="1.6" stroke-linecap="round"/>
+       <svg class="mob-nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+         <path d="M8 3h8v7a4 4 0 0 1-8 0V3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
+         <path d="M8 6H5a2 2 0 0 0 0 4h3"    stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+         <path d="M16 6h3a2 2 0 0 1 0 4h-3"  stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+         <line x1="12" y1="14" x2="12" y2="18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+         <line x1="9"  y1="21" x2="15" y2="21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
        </svg>
        <span class="mob-nav-label">Ranks</span>
      </a>
-
-     <a href="profile.html" class="mob-nav-item" aria-label="Profile">
-       <svg class="mob-nav-icon" viewBox="0 0 24 24" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-         <!-- Shield / crest shape with inner star -->
+     <a href="profile.html"     class="mob-nav-item" aria-label="Profile">
+       <svg class="mob-nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
          <path d="M12 2 L20 6 L20 13 Q20 18 12 22 Q4 18 4 13 L4 6 Z"
-               stroke="currentColor" stroke-width="1.6"
-               stroke-linejoin="round" fill="none"/>
+               stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
          <polygon points="12,8 13.2,11.4 16.8,11.4 14,13.6 15.1,17 12,14.8 8.9,17 10,13.6 7.2,11.4 10.8,11.4"
-                  stroke="currentColor" stroke-width="0.8"
-                  fill="currentColor" opacity="0.5"/>
+                  stroke="currentColor" stroke-width="0.8" fill="currentColor" opacity="0.5"/>
        </svg>
        <span class="mob-nav-label">Profile</span>
      </a>
-
    </nav>
 
-   ── Set active tab: add class="mob-nav-item active" to
-      whichever <a> matches the current page. ──
+   Set active tab: add class="mob-nav-item active" to the matching <a>.
    ============================================================ */
 
-/* Base bar — hidden by default, shown only on mobile */
 .mobile-bottom-nav {
   display: none;
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0; left: 0; right: 0;
   z-index: 1000;
   height: var(--bottom-nav-height);
-
-  background: rgba(5, 14, 22, 0.92);
+  background: rgba(5,14,22,0.92);
   backdrop-filter: blur(22px) saturate(170%);
   -webkit-backdrop-filter: blur(22px) saturate(170%);
   border-top: 1px solid rgba(65,182,255,0.22);
-  box-shadow:
-    0 -4px 24px rgba(0,0,0,0.65),
-    0 -1px 0 rgba(65,182,255,0.06),
-    inset 0 1px 0 rgba(65,182,255,0.07);
-
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.65), inset 0 1px 0 rgba(65,182,255,0.07);
   align-items: stretch;
   justify-content: space-around;
   padding: 0 4px;
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* Each tab */
 .mob-nav-item {
   display: flex;
   flex-direction: column;
@@ -947,25 +855,20 @@
   user-select: none;
 }
 
-/* Neon top-indicator pill that scales in on active */
 .mob-nav-item::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 50%;
+  top: 0; left: 50%;
   transform: translateX(-50%) scaleX(0);
-  width: 32px;
-  height: 3px;
+  width: 32px; height: 3px;
   border-radius: 0 0 6px 6px;
   background: linear-gradient(90deg, var(--neon), var(--neon-2));
-  box-shadow: 0 0 12px rgba(65,182,255,0.9), 0 2px 8px rgba(0,220,255,0.5);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 12px rgba(65,182,255,0.9);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
 }
 
-/* Icon */
 .mob-nav-icon {
-  width: 23px;
-  height: 23px;
+  width: 23px; height: 23px;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -973,7 +876,6 @@
   flex-shrink: 0;
 }
 
-/* Label */
 .mob-nav-label {
   font-family: "Orbitron", system-ui, sans-serif;
   font-size: 9px;
@@ -985,31 +887,26 @@
   white-space: nowrap;
 }
 
-/* ── Active ── */
 .mob-nav-item.active,
-.mob-nav-item[aria-current="page"] {
-  color: var(--neon);
-}
+.mob-nav-item[aria-current="page"] { color: var(--neon); }
+
 .mob-nav-item.active::before,
-.mob-nav-item[aria-current="page"]::before {
-  transform: translateX(-50%) scaleX(1);
-}
+.mob-nav-item[aria-current="page"]::before { transform: translateX(-50%) scaleX(1); }
+
 .mob-nav-item.active .mob-nav-icon,
 .mob-nav-item[aria-current="page"] .mob-nav-icon {
   stroke: var(--neon);
-  filter: drop-shadow(0 0 5px rgba(65,182,255,0.8)) drop-shadow(0 0 10px rgba(0,220,255,0.4));
+  filter: drop-shadow(0 0 5px rgba(65,182,255,0.8));
   transform: translateY(-3px) scale(1.08);
 }
+
 .mob-nav-item.active .mob-nav-label,
 .mob-nav-item[aria-current="page"] .mob-nav-label {
   color: var(--neon);
   text-shadow: 0 0 10px rgba(65,182,255,0.6);
 }
 
-/* ── Hover (brief touch flash) ── */
-.mob-nav-item:not(.active):not([aria-current="page"]):hover {
-  color: var(--accent);
-}
+.mob-nav-item:not(.active):not([aria-current="page"]):hover { color: var(--accent); }
 .mob-nav-item:not(.active):not([aria-current="page"]):hover .mob-nav-icon {
   stroke: var(--accent);
   transform: translateY(-1px);
@@ -1021,37 +918,28 @@
    ============================================================ */
 @media (min-width: 861px) {
 
-  /* ── Hide all mobile-only elements on PC ── */
   .mobile-bottom-nav { display: none !important; }
-  .page-emblem       { display: none !important; }
-  .logo-text         { display: inline !important; }
 
-  /* ── No bottom padding needed on PC ── */
   .home, .quest, .leaderboard, .profile {
     padding-bottom: clamp(12px,2vw,28px);
   }
 
-  /* ── Website: 4-col features grid ── */
   .website .features-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  /* ── Home: two-column sidebar layout ── */
   .home main {
     grid-template-columns: minmax(260px,30%) 1fr;
   }
 
-  /* ── Profile: two-column grid ── */
   .profile .profile-content {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* ── Quest: four-column grid ── */
   .quest main.quest-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  /* ── Shared header: inline row ── */
   .home header,
   .quest header,
   .leaderboard header,
@@ -1060,7 +948,6 @@
     align-items: center;
   }
 
-  /* ── Shared nav-buttons: visible, absolute right ── */
   .home .nav-buttons,
   .quest .nav-buttons,
   .leaderboard .nav-buttons,
@@ -1080,20 +967,14 @@
    ============================================================ */
 @media (max-width: 860px) {
 
-  /* ── Show bottom nav bar ── */
+  /* ── Show bottom nav ── */
   .mobile-bottom-nav { display: flex; }
 
-  /* ── Hide top header nav-buttons — replaced by bottom nav ── */
+  /* ── Hide top nav-buttons ── */
   .home .nav-buttons,
   .quest .nav-buttons,
   .leaderboard .nav-buttons,
-  .profile .nav-buttons {
-    display: none;
-  }
-
-  /* ── Show page emblems, hide plain text logo ── */
-  .page-emblem { display: block; }
-  .logo-text   { display: none; }
+  .profile .nav-buttons { display: none; }
 
   /* ── Body clearance for fixed bottom nav ── */
   .home, .quest, .leaderboard, .profile {
@@ -1110,10 +991,139 @@
     gap: 10px;
   }
 
-  /* ── Website: 2-col features ── */
-  .website .features-grid {
-    grid-template-columns: repeat(2, 1fr);
+  /* ══════════════════════════════════════════════════════════
+     MOBILE LOGO — STYLED TEXT TREATMENT
+     No HTML changes. Each page's .logo gets a compact pill
+     badge using font styling + ::before / ::after decorators.
+     The existing logo text is restyled; the subtitle is hidden
+     to keep the header lean.
+     ══════════════════════════════════════════════════════════ */
+
+  /* Base mobile logo reset — smaller, tighter, badge-like */
+  .home .logo,
+  .quest .logo,
+  .leaderboard .logo,
+  .profile .logo {
+    font-size: 13px;
+    letter-spacing: 2.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px 7px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(65,182,255,0.25);
+    background: rgba(0,20,40,0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow:
+      0 0 18px rgba(65,182,255,0.08),
+      inset 0 1px 0 rgba(65,182,255,0.08);
+    position: relative;
+    overflow: hidden;
+    text-shadow: none;
   }
+
+  /* Shimmer sweep across the badge */
+  .home .logo::after,
+  .quest .logo::after,
+  .leaderboard .logo::after,
+  .profile .logo::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(
+      105deg,
+      transparent 20%,
+      rgba(65,182,255,0.12) 50%,
+      transparent 80%
+    );
+    animation: logo-shimmer 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes logo-shimmer {
+    0%   { left: -100%; }
+    40%  { left: 140%; }
+    100% { left: 140%; }
+  }
+
+  /* Icon glyph before the text — unique per page */
+  .home .logo::before,
+  .quest .logo::before,
+  .leaderboard .logo::before,
+  .profile .logo::before {
+    font-size: 15px;
+    line-height: 1;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 6px rgba(65,182,255,0.8));
+  }
+
+  /* Hide subtitle on mobile to keep header minimal */
+  .home .subtitle,
+  .quest .subtitle,
+  .leaderboard .subtitle,
+  .profile .subtitle {
+    display: none;
+  }
+
+  /* ── HOME — compass / hub icon ── */
+  .home .logo {
+    color: #41b6ff;
+    border-color: rgba(65,182,255,0.3);
+    box-shadow:
+      0 0 20px rgba(65,182,255,0.1),
+      inset 0 1px 0 rgba(65,182,255,0.1);
+  }
+  .home .logo::before {
+    content: '⬡';
+    color: #41b6ff;
+  }
+
+  /* ── QUEST — sword / mission icon ── */
+  .quest .logo {
+    color: #00e0ff;
+    border-color: rgba(0,224,255,0.3);
+    box-shadow:
+      0 0 20px rgba(0,224,255,0.1),
+      inset 0 1px 0 rgba(0,224,255,0.1);
+  }
+  .quest .logo::before {
+    content: '⚔';
+    color: #00e0ff;
+  }
+
+  /* ── LEADERBOARD — crown / trophy icon ── */
+  .leaderboard .logo {
+    color: #73d1ff;
+    border-color: rgba(115,209,255,0.3);
+    font-size: 11px;
+    letter-spacing: 1.8px;
+    box-shadow:
+      0 0 20px rgba(115,209,255,0.1),
+      inset 0 1px 0 rgba(115,209,255,0.1);
+  }
+  .leaderboard .logo::before {
+    content: '♛';
+    color: #73d1ff;
+    font-size: 16px;
+  }
+
+  /* ── PROFILE — shield / crest icon ── */
+  .profile .logo {
+    color: #41b6ff;
+    border-color: rgba(65,182,255,0.3);
+    box-shadow:
+      0 0 20px rgba(65,182,255,0.1),
+      inset 0 1px 0 rgba(65,182,255,0.1);
+  }
+  .profile .logo::before {
+    content: '🛡';
+    font-size: 14px;
+  }
+
+  /* ── Website: 2-col features ── */
+  .website .features-grid { grid-template-columns: repeat(2, 1fr); }
 
   /* ── Home: single-column layout ── */
   .home main { grid-template-columns: 1fr; }
@@ -1159,7 +1169,7 @@
   /* ── Profile: single-column grid ── */
   .profile .profile-content { grid-template-columns: 1fr; }
 
-  /* ── Profile: full-width spans (stays correct on 1-col) ── */
+  /* ── Profile: full-width spans ── */
   .profile .log-card             { grid-column: 1 / -1; }
   .profile .logout-btn-container { grid-column: 1 / -1; }
 
@@ -1247,35 +1257,24 @@
    ============================================================ */
 @media (max-width: 600px) {
 
-  /* ── Website: 1-col features ── */
-  .website .features-grid { grid-template-columns: 1fr; }
+  .website .features-grid  { grid-template-columns: 1fr; }
+  .quest main.quest-grid   { grid-template-columns: 1fr; }
 
-  /* ── Quest: stays 1-col ── */
-  .quest main.quest-grid { grid-template-columns: 1fr; }
-
-  /* ── Stats: locked 2×2 by design even on tiny screens ── */
+  /* Stats locked 2×2 by design */
   .home .stats-grid    { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .profile .stats-grid { grid-template-columns: repeat(2, 1fr); }
 
-  /* ── Logo: tighter letter-spacing ── */
   .home .logo,
   .quest .logo,
   .leaderboard .logo,
   .profile .logo { letter-spacing: 1.5px; }
 
-  /* ── Clock: wrap on very small ── */
   .clock-bar { flex-wrap: wrap; gap: 8px; padding: 8px 10px; }
 
-  /* ── Leaderboard: shorter list ── */
   .leaderboard .leaderboard-list { max-height: 280px; }
 
-  /* ── Bottom nav: slightly shorter ── */
   .mobile-bottom-nav { height: 62px; }
-
-  /* ── Bottom nav icon: slightly smaller ── */
-  .mob-nav-icon { width: 20px; height: 20px; }
-
-  /* ── Bottom nav label: tighter ── */
-  .mob-nav-label { font-size: 8px; letter-spacing: 0.6px; }
+  .mob-nav-icon      { width: 20px; height: 20px; }
+  .mob-nav-label     { font-size: 8px; letter-spacing: 0.6px; }
 
 }
