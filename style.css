@@ -716,6 +716,7 @@
 
 /* ── Clock Bar ── */
 .header-clock {
+  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -924,6 +925,68 @@
     padding-bottom: clamp(12px,2vw,28px);
   }
 
+  /* ── Reset logo fully back to original PC appearance ── */
+  .home .logo,
+  .quest .logo,
+  .leaderboard .logo,
+  .profile .logo {
+    font-size: clamp(22px, 4vw, 32px);
+    letter-spacing: 3px;
+    display: inline;
+    align-items: unset;
+    gap: unset;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    position: static;
+    clip-path: none;
+    text-shadow: 0 0 12px rgba(65,182,255,0.35), 0 8px 40px rgba(2,10,30,0.6);
+    color: var(--neon);
+  }
+
+  /* ── Remove pseudo-element icon on PC ── */
+  .home .logo::before,
+  .quest .logo::before,
+  .leaderboard .logo::before,
+  .profile .logo::before { content: none; }
+
+  .home .logo::after,
+  .quest .logo::after,
+  .leaderboard .logo::after,
+  .profile .logo::after  { content: none; }
+
+  /* ── Restore subtitle on PC ── */
+  .home .subtitle,
+  .quest .subtitle,
+  .leaderboard .subtitle,
+  .profile .subtitle { display: block; }
+
+  /* ── Header overflow visible so absolute nav-buttons show ── */
+  .home header,
+  .quest header,
+  .leaderboard header,
+  .profile header {
+    flex-direction: row;
+    align-items: center;
+    overflow: visible;
+  }
+
+  /* ── Nav buttons visible and absolutely right-positioned ── */
+  .home .nav-buttons,
+  .quest .nav-buttons,
+  .leaderboard .nav-buttons,
+  .profile .nav-buttons {
+    display: flex;
+    position: absolute;
+    right: 20px;
+    flex-wrap: nowrap;
+    gap: 15px;
+  }
+
   .website .features-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -938,25 +1001,6 @@
 
   .quest main.quest-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .home header,
-  .quest header,
-  .leaderboard header,
-  .profile header {
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .home .nav-buttons,
-  .quest .nav-buttons,
-  .leaderboard .nav-buttons,
-  .profile .nav-buttons {
-    display: flex;
-    position: absolute;
-    right: 20px;
-    flex-wrap: nowrap;
-    gap: 15px;
   }
 
 }
@@ -999,6 +1043,14 @@
      to keep the header lean.
      ══════════════════════════════════════════════════════════ */
 
+  /* ── Ensure header stays visible, not clipped ── */
+  .home header,
+  .quest header,
+  .leaderboard header,
+  .profile header {
+    overflow: visible;
+  }
+
   /* Base mobile logo reset — smaller, tighter, badge-like */
   .home .logo,
   .quest .logo,
@@ -1019,7 +1071,8 @@
       0 0 18px rgba(65,182,255,0.08),
       inset 0 1px 0 rgba(65,182,255,0.08);
     position: relative;
-    overflow: hidden;
+    /* clip only the shimmer pseudo-element, not the whole header */
+    clip-path: inset(0 round 8px);
     text-shadow: none;
   }
 
@@ -1065,6 +1118,15 @@
   .leaderboard .subtitle,
   .profile .subtitle {
     display: none;
+  }
+
+  /* ── Clock bar: stays visible on mobile, slightly compact ── */
+  .clock-bar {
+    gap: 10px;
+    padding: 8px 12px;
+  }
+  .header-clock {
+    display: flex;
   }
 
   /* ── HOME — compass / hub icon ── */
