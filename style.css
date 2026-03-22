@@ -361,6 +361,7 @@
   text-shadow: 0 0 6px rgba(65,182,255,0.25);
 }
 
+/* ── Stats grid: always 2×2 ── */
 .home .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -534,8 +535,11 @@
 .profile .profile-detail .label      { font-weight: 700; color: var(--muted); }
 .profile .profile-detail .value      { color: var(--neon); }
 
+/* ── Profile stats grid: always 2×2 ── */
 .profile .stats-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 .profile .stat {
   background: var(--glass); padding: 14px;
@@ -556,7 +560,6 @@
 .profile .log-card {
   grid-column: 1 / -1;
 }
-
 .profile .logout-btn-container {
   grid-column: 1 / -1;
 }
@@ -729,7 +732,6 @@
 }
 
 /* ── Live Clock ── */
-/* ── Clock Bar — own row between header and quest grid ── */
 .header-clock {
   align-items: center;
   justify-content: center;
@@ -775,7 +777,6 @@
   text-transform: uppercase;
 }
 
-/* Colon blink */
 .clock-colon {
   display: inline-block;
   animation: blink 1s step-start infinite;
@@ -792,31 +793,25 @@
 
 /* ============================================================
    PC SCREENS  (min-width: 861px)
-   All desktop-specific layout rules live here.
    ============================================================ */
 @media (min-width: 861px) {
 
-  /* ── Website: 4-col features grid on PC ── */
   .website .features-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  /* ── Home: two-column sidebar layout on PC ── */
   .home main {
     grid-template-columns: minmax(260px,30%) 1fr;
   }
 
-  /* ── Profile: two-column grid on PC ── */
   .profile .profile-content {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* ── Quest: four-column grid on PC ── */
   .quest main.quest-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  /* ── Shared header: inline row on PC ── */
   .home header,
   .quest header,
   .leaderboard header,
@@ -825,7 +820,6 @@
     align-items: center;
   }
 
-  /* ── Shared nav-buttons: absolute right on PC ── */
   .home .nav-buttons,
   .quest .nav-buttons,
   .leaderboard .nav-buttons,
@@ -841,13 +835,10 @@
 
 /* ============================================================
    MOBILE SCREENS  (max-width: 860px)
-   All mobile-specific layout overrides live here.
-   Styles that remain the same as PC are NOT repeated —
-   only the UI changes needed for smaller screens are listed.
    ============================================================ */
 @media (max-width: 860px) {
 
-  /* ── Shared header: stack to column on mobile ── */
+  /* ── Shared header: stack to column ── */
   .home header,
   .quest header,
   .leaderboard header,
@@ -857,7 +848,7 @@
     gap: 10px;
   }
 
-  /* ── Shared nav-buttons: flow naturally below logo on mobile ── */
+  /* ── Shared nav-buttons: flow below logo ── */
   .home .nav-buttons,
   .quest .nav-buttons,
   .leaderboard .nav-buttons,
@@ -867,48 +858,48 @@
     gap: 8px;
   }
 
-  /* ── Website: 2-col features grid on medium-mobile, 1-col on small ── */
+  /* ── Website: 2-col features ── */
   .website .features-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* ── Home: single-column layout on mobile ── */
+  /* ── Home: single-column layout ── */
   .home main {
     grid-template-columns: 1fr;
   }
 
-  /* ── Home: full-width card padding adjustment ── */
+  /* ── Home: tighter card padding ── */
   .home .card {
     padding: 14px;
   }
 
-  /* ── Home: stats grid stays 2-col on mobile (intentional) ── */
+  /* ── Home: stats grid stays 2×2 ── */
   .home .stats-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* ── Home: smaller section title on mobile ── */
+  /* ── Home: smaller section title ── */
   .home .section-title {
     font-size: 16px;
   }
 
-  /* ── Home: tighter XP text on mobile ── */
+  /* ── Home: tighter XP text ── */
   #xp-text {
     font-size: 12px;
   }
 
-  /* ── Home: smaller level text on mobile ── */
+  /* ── Home: smaller level ── */
   .home .level {
     font-size: 15px;
   }
 
-  /* ── Home: tighter class pill on mobile ── */
+  /* ── Home: tighter class pill ── */
   .home .class-pill {
     padding: 6px 10px;
     font-size: 13px;
   }
 
-  /* ── Home: full-width quest button on mobile ── */
+  /* ── Home: full-width quest button ── */
   .home .quest-btn-container {
     margin-top: 16px;
   }
@@ -917,17 +908,17 @@
     justify-content: center;
   }
 
-  /* ── Leaderboard: increase list max-height on mobile for easier scrolling ── */
+  /* ── Leaderboard: taller list ── */
   .leaderboard .leaderboard-list {
     max-height: 340px;
   }
 
-  /* ── Leaderboard: smaller entry text on mobile ── */
+  /* ── Leaderboard: smaller entry text ── */
   .leaderboard .leaderboard-entry .entry-rank { font-size: 14px; }
   .leaderboard .leaderboard-entry .entry-name { font-size: 13px; }
   .leaderboard .leaderboard-entry .entry-class { font-size: 13px; }
 
-  /* ── Leaderboard: stack current-rank-info vertically on mobile ── */
+  /* ── Leaderboard: stack current-rank-info ── */
   .leaderboard .your-current-rank .current-rank-info {
     flex-direction: column;
     align-items: flex-start;
@@ -937,13 +928,12 @@
     margin-left: 0;
   }
 
-  /* ── Profile: single-column grid on mobile ── */
+  /* ── Profile: single-column grid ── */
   .profile .profile-content {
     grid-template-columns: 1fr;
   }
 
-  /* ── Profile: log-card and logout span full width (already via grid-column 1/-1,
-        but grid is 1-col on mobile so this is redundant — kept for clarity) ── */
+  /* ── Profile: full-width spans ── */
   .profile .log-card {
     grid-column: 1 / -1;
   }
@@ -951,78 +941,83 @@
     grid-column: 1 / -1;
   }
 
-  /* ── Profile: stack profile-info vertically on mobile ── */
+  /* ── Profile: stack profile-info ── */
   .profile .profile-info {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
 
-  /* ── Profile: smaller profile picture on mobile ── */
+  /* ── Profile: smaller avatar ── */
   .profile .profile-pic img {
     width: 80px;
     height: 80px;
   }
 
-  /* ── Profile: smaller section title on mobile ── */
+  /* ── Profile: smaller section title ── */
   .profile .section-title {
     font-size: 16px;
   }
 
-  /* ── Profile: full-width logout button on mobile ── */
+  /* ── Profile: full-width logout ── */
   .profile .logout-btn {
     width: 100%;
   }
 
-  /* ── Quest: single-column grid on mobile ── */
+  /* ── Profile: stats grid stays 2×2 ── */
+  .profile .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* ── Quest: single-column grid ── */
   .quest main.quest-grid {
     grid-template-columns: 1fr;
   }
 
-  /* ── Quest: right-column auto rows on mobile ── */
+  /* ── Quest: right-column auto rows ── */
   .quest .right-column {
     grid-template-rows: auto;
   }
 
-  /* ── Quest: smaller section title on mobile ── */
+  /* ── Quest: smaller section title ── */
   .quest .section-title {
     font-size: 16px;
   }
 
-  /* ── Quest: full-width quest add button on mobile ── */
+  /* ── Quest: full-width add button ── */
   .quest .quest-btn {
     width: 100%;
     justify-content: center;
   }
 
-  /* ── Quest rows: slightly looser padding on mobile ── */
+  /* ── Quest rows: slightly looser padding ── */
   .quest-row {
     padding: 12px 14px;
   }
 
-  /* ── Quest title: slightly larger minimum on mobile for readability ── */
+  /* ── Quest title: larger min for readability ── */
   .quest-title {
     font-size: clamp(12px, 3.5vw, 14px);
   }
 
-  /* ── Quest: full-width complete button on mobile ── */
+  /* ── Quest: full-width complete button ── */
   .quest-complete-btn {
     width: 100%;
     padding: 8px 14px;
   }
 
-  /* ── Clock bar: smaller gaps and padding on mobile ── */
+  /* ── Clock bar: compact ── */
   .clock-bar {
     gap: 10px;
     padding: 8px 12px;
   }
 
-  /* ── Clock date: slightly larger on mobile for readability ── */
+  /* ── Clock date: slightly larger ── */
   .clock-date {
     font-size: clamp(9px, 2vw, 11px);
   }
 
-  /* ── Nav buttons: smaller text and padding on mobile ── */
+  /* ── Nav buttons: smaller text and padding ── */
   .home .nav-btn,
   .quest .nav-btn,
   .leaderboard .nav-btn,
@@ -1031,51 +1026,51 @@
     padding: 8px 12px;
   }
 
-  /* ── Login: tighter container on mobile ── */
+  /* ── Login: tighter container ── */
   .login .login-container {
     padding: 24px 16px;
   }
 
-  /* ── Login: smaller heading on mobile ── */
+  /* ── Login: smaller heading ── */
   .login .login-container h2 {
     font-size: 18px;
   }
 
-  /* ── Login: full-width input touch targets on mobile ── */
+  /* ── Login: iOS-safe inputs ── */
   .login .input-field input {
     padding: 16px 14px;
-    font-size: 16px; /* prevents iOS zoom */
+    font-size: 16px;
   }
 
-  /* ── Login: larger button tap targets on mobile ── */
+  /* ── Login: larger tap targets ── */
   .login .btn {
     padding: 15px 0;
     font-size: 16px;
   }
 
-  /* ── New player: tighter container on mobile ── */
+  /* ── New player: tighter container ── */
   .new-player .new-player-container {
     padding: 24px 16px;
   }
 
-  /* ── New player: smaller heading on mobile ── */
+  /* ── New player: smaller heading ── */
   .new-player .new-player-container h2 {
     font-size: 18px;
   }
 
-  /* ── New player: full-width input touch targets on mobile ── */
+  /* ── New player: iOS-safe inputs ── */
   .new-player .input-field input {
     padding: 16px 14px;
-    font-size: 16px; /* prevents iOS zoom */
+    font-size: 16px;
   }
 
-  /* ── New player: larger button tap targets on mobile ── */
+  /* ── New player: larger tap targets ── */
   .new-player .btn {
     padding: 15px 0;
     font-size: 16px;
   }
 
-  /* ── Website: sign-in button full width on mobile ── */
+  /* ── Website: full-width sign-in button ── */
   .website .signin-btn,
   .website .btn-link {
     display: block;
@@ -1084,12 +1079,12 @@
     font-size: 17px;
   }
 
-  /* ── Website: tighter hero padding on mobile ── */
+  /* ── Website: tighter hero ── */
   .website .hero {
     padding: 50px 16px;
   }
 
-  /* ── Website: section full width on mobile ── */
+  /* ── Website: wider section ── */
   .website .section {
     width: 95%;
   }
@@ -1099,31 +1094,28 @@
 
 /* ============================================================
    EXTRA SMALL SCREENS  (max-width: 600px)
-   Fine-tuning for very small phones.
    ============================================================ */
 @media (max-width: 600px) {
 
-  /* ── Website: force single column on very small screens ── */
+  /* ── Website: 1-col features ── */
   .website .features-grid {
     grid-template-columns: 1fr;
   }
 
-  /* ── Quest: stays single column (already set at 860px) ── */
+  /* ── Quest: stays 1-col ── */
   .quest main.quest-grid {
     grid-template-columns: 1fr;
   }
 
-  /* ── Home: stats grid collapses to 1-col on very small screens ── */
+  /* ── Stats: locked 2×2 on all screen sizes ── */
   .home .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  /* ── Profile: stats grid collapses to 1-col on very small screens ── */
   .profile .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  /* ── Logo: tighter letter-spacing on very small screens ── */
+  /* ── Logo: tighter letter-spacing ── */
   .home .logo,
   .quest .logo,
   .leaderboard .logo,
@@ -1131,14 +1123,14 @@
     letter-spacing: 1.5px;
   }
 
-  /* ── Clock: compact layout on very small screens ── */
+  /* ── Clock: wrap on very small ── */
   .clock-bar {
     flex-wrap: wrap;
     gap: 8px;
     padding: 8px 10px;
   }
 
-  /* ── Leaderboard: reduce list height on very small screens ── */
+  /* ── Leaderboard: shorter list ── */
   .leaderboard .leaderboard-list {
     max-height: 280px;
   }
