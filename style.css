@@ -1,8 +1,7 @@
 /* ============================================================
    LEVELING NEXUS — style.css
    Sections: Root · Website · Login · New-Player · Home ·
-             Leaderboard · Profile · Quest · Nav Fix ·
-             Mobile Bottom Nav · Mobile Logo Styling
+             Leaderboard · Profile · Quest · Nav Fix
    ============================================================ */
 
 /* ── Google Font ── */
@@ -20,9 +19,6 @@
   --accent:  #73d1ff;
   --glass:   rgba(255,255,255,0.03);
   --radius:  14px;
-
-  /* Bottom nav height — used for body padding clearance on mobile */
-  --bottom-nav-height: 70px;
 }
 
 /* ── Global reset ── */
@@ -30,6 +26,8 @@
 
 /* ============================================================
    SHARED HEADER  (home · quest · leaderboard · profile)
+   All four pages have identical header structure:
+   logo + subtitle on the left, nav-buttons on the right.
    ============================================================ */
 
 .home header,
@@ -96,6 +94,7 @@
   box-shadow: 0 0 25px rgba(0,110,255,0.6);
 }
 
+/* Hero */
 .website .hero {
   text-align: center;
   padding: clamp(60px,10vw,100px) 20px;
@@ -114,11 +113,13 @@
   opacity: 0.85;
 }
 
+/* Section wrapper */
 .website .section {
   width: 90%;
   margin: 50px auto;
 }
 
+/* Features grid */
 .website .features-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -134,6 +135,7 @@
 }
 .website .feature-box h3 { color: #8bc9ff; }
 
+/* Sign-in panel */
 .website .signin-panel {
   text-align: center;
   margin-top: 40px;
@@ -163,6 +165,7 @@
 .website .signin-btn:hover,
 .website .btn-link:hover { background: rgba(0,180,255,1); }
 
+/* Footer */
 .website footer {
   margin-top: 80px;
   padding: 30px 20px;
@@ -171,8 +174,8 @@
   text-align: center;
   color: #bcd9ff;
 }
-.website footer a       { color: #7ac8ff; text-decoration: none; }
-.website footer a:hover { text-decoration: underline; }
+.website footer a          { color: #7ac8ff; text-decoration: none; }
+.website footer a:hover    { text-decoration: underline; }
 
 
 /* ============================================================
@@ -222,8 +225,8 @@
   margin-bottom: 20px;
 }
 
-.login .input-field       { width: 100%; margin-top: 15px; }
-.login .input-field input {
+.login .input-field        { width: 100%; margin-top: 15px; }
+.login .input-field input  {
   width: 100%; padding: 14px;
   border-radius: 10px;
   border: 1px solid rgba(80,150,255,0.5);
@@ -249,7 +252,7 @@
 
 
 /* ============================================================
-   NEW PLAYER PAGE
+   NEW PLAYER PAGE  (identical pattern to login)
    ============================================================ */
 .new-player {
   margin: 0;
@@ -295,8 +298,8 @@
   margin-bottom: 20px;
 }
 
-.new-player .input-field       { width: 100%; margin-top: 15px; }
-.new-player .input-field input {
+.new-player .input-field        { width: 100%; margin-top: 15px; }
+.new-player .input-field input  {
   width: 100%; padding: 14px;
   border-radius: 10px;
   border: 1px solid rgba(80,150,255,0.5);
@@ -368,8 +371,8 @@
   background: var(--glass); padding: 14px;
   border-radius: 12px; border: 1px solid rgba(65,182,255,0.08); text-align: center;
 }
-.home .stat .label { font-size: 12px; color: var(--muted); }
-.home .stat .value { font-size: 18px; margin-top: 6px; color: #cfeeff; font-weight: 700; }
+.home .stat .label  { font-size: 12px; color: var(--muted); }
+.home .stat .value  { font-size: 18px; margin-top: 6px; color: #cfeeff; font-weight: 700; }
 
 .home .xp-block {
   margin-top: 8px; padding: 14px; border-radius: 10px;
@@ -549,8 +552,14 @@
 }
 .profile .logout-btn:hover { background: darkred; }
 
-.profile .log-card             { grid-column: 1 / -1; }
-.profile .logout-btn-container { grid-column: 1 / -1; }
+/* Log card and logout button span full width */
+.profile .log-card {
+  grid-column: 1 / -1;
+}
+
+.profile .logout-btn-container {
+  grid-column: 1 / -1;
+}
 
 
 /* ============================================================
@@ -571,6 +580,7 @@
 
 .quest .container { width: 100%; margin: 0 auto; padding: 0 clamp(12px,2vw,32px); }
 
+/* Quest grid */
 .quest main.quest-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -584,6 +594,7 @@
   gap: 18px;
 }
 
+/* Cards */
 .quest .card {
   background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
   border-radius: var(--radius); padding: 16px;
@@ -596,6 +607,7 @@
   text-shadow: 0 0 6px rgba(65,182,255,0.25);
 }
 
+/* Quest list */
 .quest .quest-list {
   min-height: 180px;
   border-radius: 10px;
@@ -612,6 +624,7 @@
   border-radius: 6px; box-shadow: 0 0 6px rgba(65,182,255,0.6);
 }
 
+/* Add quest card */
 .quest .add-quest {
   display: flex; flex-direction: column;
   gap: 12px; align-items: center; justify-content: center;
@@ -626,6 +639,7 @@
 }
 .quest .quest-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.7); }
 
+/* Activity log */
 .quest .activity-log { margin-top: 10px; }
 .quest .log-content {
   min-height: 120px; font-size: 13px; color: var(--muted);
@@ -633,6 +647,7 @@
   border: 1px solid rgba(255,255,255,0.04);
 }
 
+/* Quest rows */
 .quest-row {
   width: 100%; box-sizing: border-box; overflow: hidden;
   display: flex; flex-direction: column;
@@ -687,7 +702,7 @@
 
 
 /* ============================================================
-   SHARED NAV BUTTONS
+   SHARED NAV BUTTONS  (home · quest · leaderboard · profile)
    ============================================================ */
 .home .nav-btn,
 .quest .nav-btn,
@@ -713,10 +728,9 @@
   box-shadow: 0 6px 18px rgba(0,120,220,0.35);
 }
 
-
-/* ── Clock Bar ── */
+/* ── Live Clock ── */
+/* ── Clock Bar — own row between header and quest grid ── */
 .header-clock {
-  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -740,12 +754,15 @@
   font-weight: 700;
   color: var(--neon);
   letter-spacing: 3px;
-  text-shadow: 0 0 10px rgba(65,182,255,0.55), 0 0 24px rgba(65,182,255,0.25);
+  text-shadow:
+    0 0 10px rgba(65,182,255,0.55),
+    0 0 24px rgba(65,182,255,0.25);
   line-height: 1;
 }
 
 .clock-sep {
-  width: 1px; height: 18px;
+  width: 1px;
+  height: 18px;
   background: rgba(65,182,255,0.2);
   flex-shrink: 0;
 }
@@ -758,6 +775,7 @@
   text-transform: uppercase;
 }
 
+/* Colon blink */
 .clock-colon {
   display: inline-block;
   animation: blink 1s step-start infinite;
@@ -767,240 +785,55 @@
   50%       { opacity: 0; }
 }
 
-.all-nav { grid-column: auto; }
-
-
-/* ============================================================
-   MOBILE BOTTOM NAVIGATION BAR
-   Fixed to bottom of viewport on mobile only.
-   Covers: Home · Quest · Leaderboard · Profile
-
-   ── Paste this HTML at the bottom of every inner page <body> ──
-
-   <nav class="mobile-bottom-nav">
-     <a href="home.html"        class="mob-nav-item" aria-label="Home">
-       <svg class="mob-nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-         <polygon points="12,3 22,11 20,11 20,21 15,21 15,15 9,15 9,21 4,21 4,11 2,11"
-                  stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
-         <polygon points="12,6.5 15.5,9.5 8.5,9.5"
-                  stroke="currentColor" stroke-width="1" fill="currentColor" opacity="0.4"/>
-       </svg>
-       <span class="mob-nav-label">Home</span>
-     </a>
-     <a href="quest.html"       class="mob-nav-item" aria-label="Quests">
-       <svg class="mob-nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-         <line x1="12" y1="3"  x2="12" y2="17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-         <line x1="8"  y1="14" x2="16" y2="14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-         <path d="M11 17 Q12 21 13 17" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-         <circle cx="12" cy="3" r="1.2" fill="currentColor" opacity="0.7"/>
-       </svg>
-       <span class="mob-nav-label">Quests</span>
-     </a>
-     <a href="leaderboard.html" class="mob-nav-item" aria-label="Leaderboard">
-       <svg class="mob-nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-         <path d="M8 3h8v7a4 4 0 0 1-8 0V3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
-         <path d="M8 6H5a2 2 0 0 0 0 4h3"    stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-         <path d="M16 6h3a2 2 0 0 1 0 4h-3"  stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-         <line x1="12" y1="14" x2="12" y2="18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-         <line x1="9"  y1="21" x2="15" y2="21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-       </svg>
-       <span class="mob-nav-label">Ranks</span>
-     </a>
-     <a href="profile.html"     class="mob-nav-item" aria-label="Profile">
-       <svg class="mob-nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-         <path d="M12 2 L20 6 L20 13 Q20 18 12 22 Q4 18 4 13 L4 6 Z"
-               stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
-         <polygon points="12,8 13.2,11.4 16.8,11.4 14,13.6 15.1,17 12,14.8 8.9,17 10,13.6 7.2,11.4 10.8,11.4"
-                  stroke="currentColor" stroke-width="0.8" fill="currentColor" opacity="0.5"/>
-       </svg>
-       <span class="mob-nav-label">Profile</span>
-     </a>
-   </nav>
-
-   Set active tab: add class="mob-nav-item active" to the matching <a>.
-   ============================================================ */
-
-.mobile-bottom-nav {
-  display: none;
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  z-index: 1000;
-  height: var(--bottom-nav-height);
-  background: rgba(5,14,22,0.92);
-  backdrop-filter: blur(22px) saturate(170%);
-  -webkit-backdrop-filter: blur(22px) saturate(170%);
-  border-top: 1px solid rgba(65,182,255,0.22);
-  box-shadow: 0 -4px 24px rgba(0,0,0,0.65), inset 0 1px 0 rgba(65,182,255,0.07);
-  align-items: stretch;
-  justify-content: space-around;
-  padding: 0 4px;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.mob-nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  flex: 1;
-  padding: 8px 4px 6px;
-  border: none;
-  background: transparent;
-  color: var(--muted);
-  text-decoration: none;
-  cursor: pointer;
-  position: relative;
-  transition: color 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-
-.mob-nav-item::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 50%;
-  transform: translateX(-50%) scaleX(0);
-  width: 32px; height: 3px;
-  border-radius: 0 0 6px 6px;
-  background: linear-gradient(90deg, var(--neon), var(--neon-2));
-  box-shadow: 0 0 12px rgba(65,182,255,0.9);
-  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-
-.mob-nav-icon {
-  width: 23px; height: 23px;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: stroke 0.2s ease, filter 0.2s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
-  flex-shrink: 0;
-}
-
-.mob-nav-label {
-  font-family: "Orbitron", system-ui, sans-serif;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  line-height: 1;
-  transition: color 0.2s ease, text-shadow 0.2s ease;
-  white-space: nowrap;
-}
-
-.mob-nav-item.active,
-.mob-nav-item[aria-current="page"] { color: var(--neon); }
-
-.mob-nav-item.active::before,
-.mob-nav-item[aria-current="page"]::before { transform: translateX(-50%) scaleX(1); }
-
-.mob-nav-item.active .mob-nav-icon,
-.mob-nav-item[aria-current="page"] .mob-nav-icon {
-  stroke: var(--neon);
-  filter: drop-shadow(0 0 5px rgba(65,182,255,0.8));
-  transform: translateY(-3px) scale(1.08);
-}
-
-.mob-nav-item.active .mob-nav-label,
-.mob-nav-item[aria-current="page"] .mob-nav-label {
-  color: var(--neon);
-  text-shadow: 0 0 10px rgba(65,182,255,0.6);
-}
-
-.mob-nav-item:not(.active):not([aria-current="page"]):hover { color: var(--accent); }
-.mob-nav-item:not(.active):not([aria-current="page"]):hover .mob-nav-icon {
-  stroke: var(--accent);
-  transform: translateY(-1px);
+.all-nav {
+  grid-column: auto;
 }
 
 
 /* ============================================================
    PC SCREENS  (min-width: 861px)
+   All desktop-specific layout rules live here.
    ============================================================ */
 @media (min-width: 861px) {
 
-  .mobile-bottom-nav { display: none !important; }
-
-  .home, .quest, .leaderboard, .profile {
-    padding-bottom: clamp(12px,2vw,28px);
+  /* ── Website: 4-col features grid on PC ── */
+  .website .features-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  /* ── Reset logo fully back to original PC appearance ── */
-  .home .logo,
-  .quest .logo,
-  .leaderboard .logo,
-  .profile .logo {
-    font-size: clamp(22px, 4vw, 32px);
-    letter-spacing: 3px;
-    display: inline;
-    align-items: unset;
-    gap: unset;
-    padding: 0;
-    border-radius: 0;
-    border: none;
-    background: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow: none;
-    position: static;
-    clip-path: none;
-    text-shadow: 0 0 12px rgba(65,182,255,0.35), 0 8px 40px rgba(2,10,30,0.6);
-    color: var(--neon);
+  /* ── Home: two-column sidebar layout on PC ── */
+  .home main {
+    grid-template-columns: minmax(260px,30%) 1fr;
   }
 
-  /* ── Remove pseudo-element icon on PC ── */
-  .home .logo::before,
-  .quest .logo::before,
-  .leaderboard .logo::before,
-  .profile .logo::before { content: none; }
+  /* ── Profile: two-column grid on PC ── */
+  .profile .profile-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
-  .home .logo::after,
-  .quest .logo::after,
-  .leaderboard .logo::after,
-  .profile .logo::after  { content: none; }
+  /* ── Quest: four-column grid on PC ── */
+  .quest main.quest-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 
-  /* ── Restore subtitle on PC ── */
-  .home .subtitle,
-  .quest .subtitle,
-  .leaderboard .subtitle,
-  .profile .subtitle { display: block; }
-
-  /* ── Header overflow visible so absolute nav-buttons show ── */
+  /* ── Shared header: inline row on PC ── */
   .home header,
   .quest header,
   .leaderboard header,
   .profile header {
     flex-direction: row;
     align-items: center;
-    overflow: visible;
   }
 
-  /* ── Nav buttons visible and absolutely right-positioned ── */
+  /* ── Shared nav-buttons: absolute right on PC ── */
   .home .nav-buttons,
   .quest .nav-buttons,
   .leaderboard .nav-buttons,
   .profile .nav-buttons {
-    display: flex;
     position: absolute;
     right: 20px;
     flex-wrap: nowrap;
     gap: 15px;
-  }
-
-  .website .features-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .home main {
-    grid-template-columns: minmax(260px,30%) 1fr;
-  }
-
-  .profile .profile-content {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .quest main.quest-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
 }
@@ -1008,40 +841,13 @@
 
 /* ============================================================
    MOBILE SCREENS  (max-width: 860px)
+   All mobile-specific layout overrides live here.
+   Styles that remain the same as PC are NOT repeated —
+   only the UI changes needed for smaller screens are listed.
    ============================================================ */
 @media (max-width: 860px) {
 
-  /* ── Show bottom nav ── */
-  .mobile-bottom-nav { display: flex; }
-
-  /* ── Nav-buttons: flow below logo in stacked header on mobile ── */
-  .home .nav-buttons,
-  .quest .nav-buttons,
-  .leaderboard .nav-buttons,
-  .profile .nav-buttons {
-    display: flex;
-    position: static;
-    flex-wrap: wrap;
-    gap: 6px;
-    width: 100%;
-  }
-
-  /* ── Smaller nav buttons on mobile for better fit ── */
-  .home .nav-btn,
-  .quest .nav-btn,
-  .leaderboard .nav-btn,
-  .profile .nav-btn {
-    font-size: 11px;
-    padding: 7px 12px;
-    letter-spacing: 1px;
-  }
-
-  /* ── Body clearance for fixed bottom nav ── */
-  .home, .quest, .leaderboard, .profile {
-    padding-bottom: calc(var(--bottom-nav-height) + 16px);
-  }
-
-  /* ── Shared header: column stack ── */
+  /* ── Shared header: stack to column on mobile ── */
   .home header,
   .quest header,
   .leaderboard header,
@@ -1051,310 +857,290 @@
     gap: 10px;
   }
 
-  /* ══════════════════════════════════════════════════════════
-     MOBILE LOGO — STYLED TEXT TREATMENT
-     No HTML changes. Each page's .logo gets a compact pill
-     badge using font styling + ::before / ::after decorators.
-     The existing logo text is restyled; the subtitle is hidden
-     to keep the header lean.
-     ══════════════════════════════════════════════════════════ */
-
-  /* ── Ensure header stays visible, not clipped ── */
-  .home header,
-  .quest header,
-  .leaderboard header,
-  .profile header {
-    overflow: visible;
-  }
-
-  /* Base mobile logo reset — smaller, tighter, badge-like */
-  .home .logo,
-  .quest .logo,
-  .leaderboard .logo,
-  .profile .logo {
-    font-size: 13px;
-    letter-spacing: 2.5px;
-    display: inline-flex;
-    align-items: center;
+  /* ── Shared nav-buttons: flow naturally below logo on mobile ── */
+  .home .nav-buttons,
+  .quest .nav-buttons,
+  .leaderboard .nav-buttons,
+  .profile .nav-buttons {
+    position: static;
+    flex-wrap: wrap;
     gap: 8px;
-    padding: 7px 14px 7px 10px;
-    border-radius: 8px;
-    border: 1px solid rgba(65,182,255,0.25);
-    background: rgba(0,20,40,0.55);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow:
-      0 0 18px rgba(65,182,255,0.08),
-      inset 0 1px 0 rgba(65,182,255,0.08);
-    position: relative;
-    /* clip only the shimmer pseudo-element, not the whole header */
-    clip-path: inset(0 round 8px);
-    text-shadow: none;
   }
 
-  /* Shimmer sweep across the badge */
-  .home .logo::after,
-  .quest .logo::after,
-  .leaderboard .logo::after,
-  .profile .logo::after {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 60%; height: 100%;
-    background: linear-gradient(
-      105deg,
-      transparent 20%,
-      rgba(65,182,255,0.12) 50%,
-      transparent 80%
-    );
-    animation: logo-shimmer 4s ease-in-out infinite;
-    pointer-events: none;
+  /* ── Website: 2-col features grid on medium-mobile, 1-col on small ── */
+  .website .features-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  @keyframes logo-shimmer {
-    0%   { left: -100%; }
-    40%  { left: 140%; }
-    100% { left: 140%; }
+  /* ── Home: single-column layout on mobile ── */
+  .home main {
+    grid-template-columns: 1fr;
   }
 
-  /* Icon glyph before the text — unique per page */
-  .home .logo::before,
-  .quest .logo::before,
-  .leaderboard .logo::before,
-  .profile .logo::before {
-    font-size: 15px;
-    line-height: 1;
-    flex-shrink: 0;
-    filter: drop-shadow(0 0 6px rgba(65,182,255,0.8));
+  /* ── Home: full-width card padding adjustment ── */
+  .home .card {
+    padding: 14px;
   }
 
-  /* Hide subtitle on mobile to keep header minimal */
-  .home .subtitle,
-  .quest .subtitle,
-  .leaderboard .subtitle,
-  .profile .subtitle {
-    display: none;
+  /* ── Home: stats grid stays 2-col on mobile (intentional) ── */
+  .home .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* ── Clock bar: stays visible on mobile, slightly compact ── */
-  .clock-bar {
-    display: flex;
-    gap: 10px;
-    padding: 8px 12px;
-  }
-  .header-clock {
-    display: flex;
-    width: 100%;
-  }
-
-  /* ── HOME — compass / hub icon ── */
-  .home .logo {
-    color: #41b6ff;
-    border-color: rgba(65,182,255,0.3);
-    box-shadow:
-      0 0 20px rgba(65,182,255,0.1),
-      inset 0 1px 0 rgba(65,182,255,0.1);
-  }
-  .home .logo::before {
-    content: '⬡';
-    color: #41b6ff;
-  }
-
-  /* ── QUEST — sword / mission icon ── */
-  .quest .logo {
-    color: #00e0ff;
-    border-color: rgba(0,224,255,0.3);
-    box-shadow:
-      0 0 20px rgba(0,224,255,0.1),
-      inset 0 1px 0 rgba(0,224,255,0.1);
-  }
-  .quest .logo::before {
-    content: '⚔';
-    color: #00e0ff;
-  }
-
-  /* ── LEADERBOARD — crown / trophy icon ── */
-  .leaderboard .logo {
-    color: #73d1ff;
-    border-color: rgba(115,209,255,0.3);
-    font-size: 11px;
-    letter-spacing: 1.8px;
-    box-shadow:
-      0 0 20px rgba(115,209,255,0.1),
-      inset 0 1px 0 rgba(115,209,255,0.1);
-  }
-  .leaderboard .logo::before {
-    content: '♛';
-    color: #73d1ff;
+  /* ── Home: smaller section title on mobile ── */
+  .home .section-title {
     font-size: 16px;
   }
 
-  /* ── PROFILE — shield / crest icon ── */
-  .profile .logo {
-    color: #41b6ff;
-    border-color: rgba(65,182,255,0.3);
-    box-shadow:
-      0 0 20px rgba(65,182,255,0.1),
-      inset 0 1px 0 rgba(65,182,255,0.1);
-  }
-  .profile .logo::before {
-    content: '🛡';
-    font-size: 14px;
+  /* ── Home: tighter XP text on mobile ── */
+  #xp-text {
+    font-size: 12px;
   }
 
-  /* ── Website: 2-col features ── */
-  .website .features-grid { grid-template-columns: repeat(2, 1fr); }
+  /* ── Home: smaller level text on mobile ── */
+  .home .level {
+    font-size: 15px;
+  }
 
-  /* ── Home: single-column layout ── */
-  .home main { grid-template-columns: 1fr; }
+  /* ── Home: tighter class pill on mobile ── */
+  .home .class-pill {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
 
-  /* ── Home: tighter card padding ── */
-  .home .card { padding: 14px; }
+  /* ── Home: full-width quest button on mobile ── */
+  .home .quest-btn-container {
+    margin-top: 16px;
+  }
+  .home .quest-btn {
+    width: 100%;
+    justify-content: center;
+  }
 
-  /* ── Home: stats grid stays 2×2 ── */
-  .home .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* ── Leaderboard: increase list max-height on mobile for easier scrolling ── */
+  .leaderboard .leaderboard-list {
+    max-height: 340px;
+  }
 
-  /* ── Home: smaller section title ── */
-  .home .section-title { font-size: 16px; }
-
-  /* ── Home: tighter XP text ── */
-  #xp-text { font-size: 12px; }
-
-  /* ── Home: smaller level ── */
-  .home .level { font-size: 15px; }
-
-  /* ── Home: tighter class pill ── */
-  .home .class-pill { padding: 6px 10px; font-size: 13px; }
-
-  /* ── Home: full-width quest button ── */
-  .home .quest-btn-container { margin-top: 16px; }
-  .home .quest-btn { width: 100%; justify-content: center; }
-
-  /* ── Leaderboard: taller list ── */
-  .leaderboard .leaderboard-list { max-height: 340px; }
-
-  /* ── Leaderboard: smaller entry text ── */
-  .leaderboard .leaderboard-entry .entry-rank  { font-size: 14px; }
-  .leaderboard .leaderboard-entry .entry-name  { font-size: 13px; }
+  /* ── Leaderboard: smaller entry text on mobile ── */
+  .leaderboard .leaderboard-entry .entry-rank { font-size: 14px; }
+  .leaderboard .leaderboard-entry .entry-name { font-size: 13px; }
   .leaderboard .leaderboard-entry .entry-class { font-size: 13px; }
 
-  /* ── Leaderboard: stack current-rank-info ── */
+  /* ── Leaderboard: stack current-rank-info vertically on mobile ── */
   .leaderboard .your-current-rank .current-rank-info {
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
   }
-  .leaderboard .your-current-rank .name { margin-left: 0; }
+  .leaderboard .your-current-rank .name {
+    margin-left: 0;
+  }
 
-  /* ── Profile: single-column grid ── */
-  .profile .profile-content { grid-template-columns: 1fr; }
+  /* ── Profile: single-column grid on mobile ── */
+  .profile .profile-content {
+    grid-template-columns: 1fr;
+  }
 
-  /* ── Profile: full-width spans ── */
-  .profile .log-card             { grid-column: 1 / -1; }
-  .profile .logout-btn-container { grid-column: 1 / -1; }
+  /* ── Profile: log-card and logout span full width (already via grid-column 1/-1,
+        but grid is 1-col on mobile so this is redundant — kept for clarity) ── */
+  .profile .log-card {
+    grid-column: 1 / -1;
+  }
+  .profile .logout-btn-container {
+    grid-column: 1 / -1;
+  }
 
-  /* ── Profile: stack profile-info ── */
-  .profile .profile-info { flex-direction: column; align-items: center; text-align: center; }
+  /* ── Profile: stack profile-info vertically on mobile ── */
+  .profile .profile-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 
-  /* ── Profile: smaller avatar ── */
-  .profile .profile-pic img { width: 80px; height: 80px; }
+  /* ── Profile: smaller profile picture on mobile ── */
+  .profile .profile-pic img {
+    width: 80px;
+    height: 80px;
+  }
 
-  /* ── Profile: smaller section title ── */
-  .profile .section-title { font-size: 16px; }
+  /* ── Profile: smaller section title on mobile ── */
+  .profile .section-title {
+    font-size: 16px;
+  }
 
-  /* ── Profile: full-width logout ── */
-  .profile .logout-btn { width: 100%; }
+  /* ── Profile: full-width logout button on mobile ── */
+  .profile .logout-btn {
+    width: 100%;
+  }
 
-  /* ── Profile: stats 2×2 ── */
-  .profile .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  /* ── Quest: single-column grid on mobile ── */
+  .quest main.quest-grid {
+    grid-template-columns: 1fr;
+  }
 
-  /* ── Quest: single-column grid ── */
-  .quest main.quest-grid { grid-template-columns: 1fr; }
+  /* ── Quest: right-column auto rows on mobile ── */
+  .quest .right-column {
+    grid-template-rows: auto;
+  }
 
-  /* ── Quest: right-column auto rows ── */
-  .quest .right-column { grid-template-rows: auto; }
+  /* ── Quest: smaller section title on mobile ── */
+  .quest .section-title {
+    font-size: 16px;
+  }
 
-  /* ── Quest: smaller section title ── */
-  .quest .section-title { font-size: 16px; }
+  /* ── Quest: full-width quest add button on mobile ── */
+  .quest .quest-btn {
+    width: 100%;
+    justify-content: center;
+  }
 
-  /* ── Quest: full-width add button ── */
-  .quest .quest-btn { width: 100%; justify-content: center; }
+  /* ── Quest rows: slightly looser padding on mobile ── */
+  .quest-row {
+    padding: 12px 14px;
+  }
 
-  /* ── Quest rows: slightly looser padding ── */
-  .quest-row { padding: 12px 14px; }
+  /* ── Quest title: slightly larger minimum on mobile for readability ── */
+  .quest-title {
+    font-size: clamp(12px, 3.5vw, 14px);
+  }
 
-  /* ── Quest title: larger min for readability ── */
-  .quest-title { font-size: clamp(12px, 3.5vw, 14px); }
+  /* ── Quest: full-width complete button on mobile ── */
+  .quest-complete-btn {
+    width: 100%;
+    padding: 8px 14px;
+  }
 
-  /* ── Quest: full-width complete button ── */
-  .quest-complete-btn { width: 100%; padding: 8px 14px; }
+  /* ── Clock bar: smaller gaps and padding on mobile ── */
+  .clock-bar {
+    gap: 10px;
+    padding: 8px 12px;
+  }
 
-  /* ── Clock bar: compact ── */
-  .clock-bar { gap: 10px; padding: 8px 12px; }
+  /* ── Clock date: slightly larger on mobile for readability ── */
+  .clock-date {
+    font-size: clamp(9px, 2vw, 11px);
+  }
 
-  /* ── Clock date: slightly larger ── */
-  .clock-date { font-size: clamp(9px, 2vw, 11px); }
+  /* ── Nav buttons: smaller text and padding on mobile ── */
+  .home .nav-btn,
+  .quest .nav-btn,
+  .leaderboard .nav-btn,
+  .profile .nav-btn {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
 
-  /* ── Login: tighter container ── */
-  .login .login-container { padding: 24px 16px; }
+  /* ── Login: tighter container on mobile ── */
+  .login .login-container {
+    padding: 24px 16px;
+  }
 
-  /* ── Login: smaller heading ── */
-  .login .login-container h2 { font-size: 18px; }
+  /* ── Login: smaller heading on mobile ── */
+  .login .login-container h2 {
+    font-size: 18px;
+  }
 
-  /* ── Login: iOS-safe inputs ── */
-  .login .input-field input { padding: 16px 14px; font-size: 16px; }
+  /* ── Login: full-width input touch targets on mobile ── */
+  .login .input-field input {
+    padding: 16px 14px;
+    font-size: 16px; /* prevents iOS zoom */
+  }
 
-  /* ── Login: larger tap targets ── */
-  .login .btn { padding: 15px 0; font-size: 16px; }
+  /* ── Login: larger button tap targets on mobile ── */
+  .login .btn {
+    padding: 15px 0;
+    font-size: 16px;
+  }
 
-  /* ── New player: tighter container ── */
-  .new-player .new-player-container { padding: 24px 16px; }
+  /* ── New player: tighter container on mobile ── */
+  .new-player .new-player-container {
+    padding: 24px 16px;
+  }
 
-  /* ── New player: smaller heading ── */
-  .new-player .new-player-container h2 { font-size: 18px; }
+  /* ── New player: smaller heading on mobile ── */
+  .new-player .new-player-container h2 {
+    font-size: 18px;
+  }
 
-  /* ── New player: iOS-safe inputs ── */
-  .new-player .input-field input { padding: 16px 14px; font-size: 16px; }
+  /* ── New player: full-width input touch targets on mobile ── */
+  .new-player .input-field input {
+    padding: 16px 14px;
+    font-size: 16px; /* prevents iOS zoom */
+  }
 
-  /* ── New player: larger tap targets ── */
-  .new-player .btn { padding: 15px 0; font-size: 16px; }
+  /* ── New player: larger button tap targets on mobile ── */
+  .new-player .btn {
+    padding: 15px 0;
+    font-size: 16px;
+  }
 
-  /* ── Website: full-width sign-in button ── */
+  /* ── Website: sign-in button full width on mobile ── */
   .website .signin-btn,
-  .website .btn-link { display: block; width: 100%; padding: 14px 20px; font-size: 17px; }
+  .website .btn-link {
+    display: block;
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 17px;
+  }
 
-  /* ── Website: tighter hero ── */
-  .website .hero { padding: 50px 16px; }
+  /* ── Website: tighter hero padding on mobile ── */
+  .website .hero {
+    padding: 50px 16px;
+  }
 
-  /* ── Website: wider section ── */
-  .website .section { width: 95%; }
+  /* ── Website: section full width on mobile ── */
+  .website .section {
+    width: 95%;
+  }
 
 }
 
 
 /* ============================================================
    EXTRA SMALL SCREENS  (max-width: 600px)
+   Fine-tuning for very small phones.
    ============================================================ */
 @media (max-width: 600px) {
 
-  .website .features-grid  { grid-template-columns: 1fr; }
-  .quest main.quest-grid   { grid-template-columns: 1fr; }
+  /* ── Website: force single column on very small screens ── */
+  .website .features-grid {
+    grid-template-columns: 1fr;
+  }
 
-  /* Stats locked 2×2 by design */
-  .home .stats-grid    { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .profile .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  /* ── Quest: stays single column (already set at 860px) ── */
+  .quest main.quest-grid {
+    grid-template-columns: 1fr;
+  }
 
+  /* ── Home: stats grid collapses to 1-col on very small screens ── */
+  .home .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Profile: stats grid collapses to 1-col on very small screens ── */
+  .profile .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Logo: tighter letter-spacing on very small screens ── */
   .home .logo,
   .quest .logo,
   .leaderboard .logo,
-  .profile .logo { letter-spacing: 1.5px; }
+  .profile .logo {
+    letter-spacing: 1.5px;
+  }
 
-  .clock-bar { flex-wrap: wrap; gap: 8px; padding: 8px 10px; }
+  /* ── Clock: compact layout on very small screens ── */
+  .clock-bar {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 10px;
+  }
 
-  .leaderboard .leaderboard-list { max-height: 280px; }
-
-  .mobile-bottom-nav { height: 62px; }
-  .mob-nav-icon      { width: 20px; height: 20px; }
-  .mob-nav-label     { font-size: 8px; letter-spacing: 0.6px; }
+  /* ── Leaderboard: reduce list height on very small screens ── */
+  .leaderboard .leaderboard-list {
+    max-height: 280px;
+  }
 
 }
