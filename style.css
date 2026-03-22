@@ -918,15 +918,27 @@
   .leaderboard .leaderboard-entry .entry-name { font-size: 13px; }
   .leaderboard .leaderboard-entry .entry-class { font-size: 13px; }
 
-  /* ── Leaderboard: stack current-rank-info ── */
+  /* ── Leaderboard: shrink + un-sticky current-rank on mobile ── */
+  .leaderboard .your-current-rank {
+    position: static;
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+  .leaderboard .your-current-rank .section-title {
+    font-size: 12px;
+    margin-bottom: 6px;
+    letter-spacing: 1.5px;
+  }
   .leaderboard .your-current-rank .current-rank-info {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
   }
-  .leaderboard .your-current-rank .name {
-    margin-left: 0;
-  }
+  .leaderboard .your-current-rank .rank  { font-size: 13px; }
+  .leaderboard .your-current-rank .class { font-size: 12px; }
+  .leaderboard .your-current-rank .name  { font-size: 12px; margin-left: 0; }
 
   /* ── Profile: single-column grid ── */
   .profile .profile-content {
