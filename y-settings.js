@@ -140,6 +140,8 @@ function injectSettingsStyles() {
       border: 1px solid rgba(0, 255, 180, 0.2);
       border-radius: 8px;
       width: min(480px, 92vw);
+      max-height: 90vh;
+      overflow-y: auto;
       padding: 28px 28px 32px;
       box-shadow:
         0 0 60px rgba(0, 255, 180, 0.06),
@@ -324,9 +326,11 @@ function injectSettingsStyles() {
       display: none;
       position: fixed;
       inset: 0;
-      z-index: 1100;
+      z-index: 1200;
       align-items: center;
       justify-content: center;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
     }
     .confirm-modal.active {
       display: flex;
@@ -337,11 +341,15 @@ function injectSettingsStyles() {
       border-radius: 8px;
       padding: 28px;
       width: min(400px, 88vw);
+      max-height: 90vh;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 16px;
       box-shadow: 0 0 40px rgba(255, 50, 50, 0.1);
       animation: slideUpPanel 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      position: relative;
+      z-index: 1201;
     }
     .confirm-title {
       font-family: 'Orbitron', monospace;
