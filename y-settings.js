@@ -80,29 +80,33 @@ function injectSettingsModal() {
       </div>
 
     </div>
-
-    <!-- Delete Confirm Sub-Modal -->
-    <div class="confirm-modal" id="confirm-modal">
-      <div class="confirm-box">
-        <div class="confirm-title">⚠ CONFIRM DELETION</div>
-        <p class="confirm-text">
-          Type your password below to confirm permanent account deletion.
-        </p>
-        <input
-          type="password"
-          id="confirm-password-input"
-          class="settings-input"
-          placeholder="Your password..."
-        />
-        <div class="confirm-actions">
-          <button class="settings-btn settings-btn-ghost" id="confirm-cancel">CANCEL</button>
-          <button class="settings-btn settings-btn-danger" id="confirm-delete">DELETE</button>
-        </div>
-        <div class="settings-feedback" id="confirm-feedback"></div>
-      </div>
-    </div>
   `;
   document.body.appendChild(modal);
+
+  /* ── Confirm sub-modal appended separately so fixed/inset covers full viewport ── */
+  const confirmModal = document.createElement("div");
+  confirmModal.className = "confirm-modal";
+  confirmModal.id = "confirm-modal";
+  confirmModal.innerHTML = `
+    <div class="confirm-box">
+      <div class="confirm-title">⚠ CONFIRM DELETION</div>
+      <p class="confirm-text">
+        Type your password below to confirm permanent account deletion.
+      </p>
+      <input
+        type="password"
+        id="confirm-password-input"
+        class="settings-input"
+        placeholder="Your password..."
+      />
+      <div class="confirm-actions">
+        <button class="settings-btn settings-btn-ghost" id="confirm-cancel">CANCEL</button>
+        <button class="settings-btn settings-btn-danger" id="confirm-delete">DELETE</button>
+      </div>
+      <div class="settings-feedback" id="confirm-feedback"></div>
+    </div>
+  `;
+  document.body.appendChild(confirmModal);
 }
 
 // ── Inject CSS ───────────────────────────────────────────────────────────────
