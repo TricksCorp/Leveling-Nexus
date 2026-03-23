@@ -329,12 +329,15 @@ function injectSettingsStyles() {
     .confirm-modal {
       display: none;
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       z-index: 1200;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
     }
     .confirm-modal.active {
       display: flex;
@@ -353,7 +356,7 @@ function injectSettingsStyles() {
       box-shadow: 0 0 40px rgba(255, 50, 50, 0.1);
       animation: slideUpPanel 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
       position: relative;
-      z-index: 1201;
+      margin: auto;
     }
     .confirm-title {
       font-family: 'Orbitron', monospace;
