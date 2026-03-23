@@ -566,6 +566,21 @@
   grid-column: 1 / -1;
 }
 
+.profile .logout-btn-container {
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile .logout-btn-container #open-settings {
+  background: grey;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+.profile .logout-btn-container #open-settings:hover {
+  background: dimgrey;
+}
+
 
 /* ============================================================
    QUEST PAGE
