@@ -138,6 +138,14 @@ async function initNotifications() {
 
   await checkQuestReset(reg);
   scheduleDailyReminder(reg);
+
+  // Welcome notification on login page open
+  await showNotification(
+    reg,
+    "👋 Welcome, Player!",
+    "Are you ready to complete your quests? Your journey continues!",
+    "nexus-welcome"
+  );
 }
 
 initNotifications();
