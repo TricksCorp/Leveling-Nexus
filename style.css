@@ -1372,3 +1372,68 @@
   }
 
 }
+
+@media (max-width: 1140px) {
+  .home header,
+  .quest header,
+  .leaderboard header,
+  .profile header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .home .nav-buttons,
+  .quest .nav-buttons,
+  .leaderboard .nav-buttons,
+  .profile .nav-buttons {
+    position: static;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 320px) {
+  .profile .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .profile .profile-content {
+    grid-template-columns: 1fr;
+  }
+
+  .profile .profile-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .profile .profile-pic img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .home .logo,
+  .quest .logo,
+  .leaderboard .logo,
+  .profile .logo {
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  .home .nav-btn,
+  .quest .nav-btn,
+  .leaderboard .nav-btn,
+  .profile .nav-btn {
+    font-size: 9px;
+    padding: 4px 7px;
+    border-radius: 5px;
+  }
+
+  .home .nav-buttons,
+  .quest .nav-buttons,
+  .leaderboard .nav-buttons,
+  .profile .nav-buttons {
+    gap: 4px;
+  }
+}
