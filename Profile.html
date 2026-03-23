@@ -50,6 +50,13 @@
   <script type="module" src="y-gameLogic.js"></script>
   <script type="module" src="y-profilepic.js"></script>
 
+  <script type="module">
+    import { initSettings } from "./y-settings.js";
+    // Wait for DOM before initialising so the logout container exists
+    document.addEventListener("DOMContentLoaded", () => initSettings());
+  </script>
+
+
 </head>
 
 <body class="profile">
@@ -138,6 +145,7 @@
 
         <!-- Log Out Button -->
         <div class="logout-btn-container">
+          <button class="logout-btn" id="open-settings">Settings</button>
           <button class="logout-btn" id="logout">Log Out</button>
         </div>
       </div>
