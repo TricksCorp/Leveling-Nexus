@@ -334,13 +334,11 @@ function injectSettingsStyles() {
       width: 100vw;
       height: 100vh;
       z-index: 1200;
-      align-items: center;
-      justify-content: center;
       background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(6px);
     }
     .confirm-modal.active {
-      display: flex;
+      display: block;
     }
     .confirm-box {
       background: #060d0c;
@@ -354,9 +352,11 @@ function injectSettingsStyles() {
       flex-direction: column;
       gap: 16px;
       box-shadow: 0 0 40px rgba(255, 50, 50, 0.1);
-      animation: slideUpPanel 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      position: relative;
-      margin: auto;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1201;
     }
     .confirm-title {
       font-family: 'Orbitron', monospace;
