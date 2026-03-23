@@ -466,12 +466,14 @@ export function initSettings() {
 
   // ── Delete Account — open confirm sub-modal ──
   deleteBtn.addEventListener("click", () => {
+    document.querySelector(".settings-panel").style.display = "none";
     confirmModal.classList.add("active");
     confirmPwInput.focus();
   });
 
   confirmCancel.addEventListener("click", () => {
     confirmModal.classList.remove("active");
+    document.querySelector(".settings-panel").style.display = "";
     confirmPwInput.value = "";
     confirmFeedback.textContent = "";
   });
@@ -527,6 +529,7 @@ export function initSettings() {
       setFeedback(confirmFeedback, msg, "error");
       confirmDelete.disabled = false;
       confirmDelete.textContent = "DELETE";
+      document.querySelector(".settings-panel").style.display = "";
     }
   });
 }
